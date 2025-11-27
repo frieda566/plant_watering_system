@@ -66,6 +66,25 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
   - Animated LED Effects: Instead of just static colors, use patterns to show the plant’s “mood” (slow breathing effect = healthy, blinking = thirsty).
   - screen
 
+### 24.11.2025
+-	As we conducted this meeting in the KLIPPO we decided to not incorporate the buzzer 
+-	Sadly, no new idea for the external power source 
+-	Somehow the relay module made a weird clicking sound and a red LED went blinking for a short time when running the code 
+-	Somehow the serial monitor created weird values when the soil monitor was put in water -> we have to fix the calculation so that the pump actually turns off when the soil moisture is enough -> realized that when putting the soil moisture sensor in wrong (not headfirst and straight) the values don’t make that much sense 
+-   Added this logic into our code: 
+  - add code so that instead of keeping the pump ON continuously, you can: 
+    - run pump for 5 seconds or so 
+    - pause 1 min 
+    - recheck soil (to prevent flooding) 
+-   in the next step we added the Ultrasonic sensor to measure the distance in our bowl of water additionally we added a blue LED on the breadboard which is supposed to blink when the water levels are too low 
+  - somehow the Serial monitor detected the correct things yet the blue LED didn’t follow this pattern 
+  - realized that it only updated the water level value every minute – had to create a code where the water level is being overlooked simultaneously 
+  - now it all worked accordingly 
+-   tried to add the LED screen yet seemed pretty complicated as multiple wires are necessary and other sources seemed to use additional components to make the connection easier 
+-	tried it out despite that – installed LiquidCrystal_I2C.h 
+  - it lit up a bit yet nothing else happened - we weren't sure if we had gotten the connections right - so we wrote that question down for the next time we had class 
+
+
 
 
 
