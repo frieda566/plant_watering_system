@@ -50,6 +50,24 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
 -   We discussed that for our next meeting we would look up further additions for our setup and how to implement them – so that next time – when the relay module can be used and we have a solution for our external power source (can’t keep using the battery or the + and – of our breadboard) we can implement everything we have planed 
 -	Additionally, we want to use Python for our user interface – so as soon as the “basics” of the physical part (Arduino…) are finalized we want to add the major part of the software part of our project 
 
+### 22.11.2025 
+- Frieda thought about further additions for our setup: 
+  - Water Level Sensor: Detect if the reservoir is empty to prevent pump burnout
+    - As soon as the water level reaches below a certain number an LED on the board should turn on and a notification should be in the Python interface: 
+![water_distance_sensor] (images/water_distance_sensor_setup.jpg)
+  - Variable Watering: Instead of just ON/OFF, calculate the amount of water needed based on soil dryness, plant type, and ambient temperature.
+    - Using temperature-humidity sensor?
+    - https://letplant.com/insights/indoor-houseplants/ - different plant types and their needs 
+    - add code so that instead of keeping the pump ON continuously, you can: 
+    •	run pump for 5 seconds or so 
+    •	pause 1 min 
+    •	recheck soil (to prevent flooding) 
+  - Trend Analysis:  to see how the plant’s environment changes.
+  - Animated LED Effects: Instead of just static colors, use patterns to show the plant’s “mood” (slow breathing effect = healthy, blinking = thirsty).
+  - screen
+
+
+
 
 
 
