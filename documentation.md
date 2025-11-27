@@ -53,8 +53,8 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
 ### 22.11.2025 
 - Frieda thought about further additions for our setup: 
   - Water Level Sensor: Detect if the reservoir is empty to prevent pump burnout
-    - As soon as the water level reaches below a certain number an LED on the board should turn on and a notification should be in the Python interface: 
-![water_distance_sensor] (images/water_distance_sensor_setup.jpg)
+    - As soon as the water level reaches below a certain number an LED on the board should turn on and a notification should be in the Python interface:
+      ![](images/water_distance_sensor_setup.jpg) (images/water_distance_sensor_setup.jpg)
   - Variable Watering: Instead of just ON/OFF, calculate the amount of water needed based on soil dryness, plant type, and ambient temperature.
     - Using temperature-humidity sensor?
     - https://letplant.com/insights/indoor-houseplants/ - different plant types and their needs 
