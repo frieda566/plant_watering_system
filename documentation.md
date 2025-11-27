@@ -33,6 +33,25 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
 	- For the actual turning on or off of the LED it was important to have a short code in the Arduino IDE that made the pins either high or low depending on the input – this way when I typed in ON in the Terminal on python it actually turned on the green led 
 	- Sadly the red pin and its commands didn’t work but for me in that moment it was enough to gain a better understanding of using Arduino IDE and Python together 
 
+### 21.11.2025 
+-	sadly the relay module which we ordered didn’t arrive on time so today we tried the pump and the rest of the project without using the relay 
+-	beforehand we tried bending the “legs” of the relay once again but it didn’t work 
+-	we discussed potentially using the remote control or touch sensor 
+-	additionally when looking up similar projects this idea catched our eye: https://projecthub.arduino.cc/lc_lab/automatic-watering-system-for-my-plants-e4c4b9 
+-	we would also like to incorporate the monitor (5V 1602A Module), buzzer as well as the ultrasonic distance sensor
+    - the buzzer could play a melody when the soil is too dry and the distance sensor could come in handy to measure the water level of the cup the water is in
+-   somehow the pump seemed to work when we inserted it into the breadboards side (+ and -) – then we realized that just putting the + cable of the pump into pin 3 -> Is only for signal but not for actually powering the pump 
+-	pump in GND (- line which is connected to GND) and the + wire of the pump Is in the same line as the wire from pin 3 – which is the sensor for the pump? – for the pump to be turned on or off depending on the soil moisture 
+-	then suddenly pump wasn’t strong enough – have to think of a better external power supply to ensure the pump has enough power 
+-	other than that technically the setup worked – when the soil moisture sensor was dry water was pumped and when it was wet the pump stopped 
+-	additionally the buzzer played Pirates of the Caribbean as soon as the soil moisture detected no moisture? Or less moisture? 
+-	the Serial monitor showed: …. 
+- #### code we used in this case & for this specific setup see WORD 
+-   We discussed that for our next meeting we would look up further additions for our setup and how to implement them – so that next time – when the relay module can be used and we have a solution for our external power source (can’t keep using the battery or the + and – of our breadboard) we can implement everything we have planed 
+-	Additionally, we want to use Python for our user interface – so as soon as the “basics” of the physical part (Arduino…) are finalized we want to add the major part of the software part of our project 
+
+
+
 
 
 
