@@ -1,168 +1,204 @@
 import serial
 import sqlite3
 import threading
-import time
+import queue
 import tkinter as tk
 from tkinter import ttk
 from datetime import datetime
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-# --------------------------
-# CONFIG
-# --------------------------
-SERIAL_PORT = "/dev/cu.usbmodem11101"     # <-- CHANGE THIS TO YOUR COM PORT
+# ---------------- CONFIG ----------------
+SERIAL_PORT = "/dev/cu.usbmodem1101"  # change to your port
 BAUD_RATE = 9600
 
-# --------------------------
-# DATABASE SETUP
-# --------------------------
-conn = sqlite3.connect("plant_data.db")
+# ---------------- DATABASE ----------------
+conn = sqlite3.connect("plant_data.db", check_same_thread=False)
 cur = conn.cursor()
-
 cur.execute("""
 CREATE TABLE IF NOT EXISTS readings (
     timestamp TEXT,
     moisture INTEGER,
-    water_dist INTEGER
+    temperature INTEGER,
+    humidity INTEGER
 )
 """)
 conn.commit()
 
-# --------------------------
-# READ FROM ARDUINO THREAD
-# --------------------------
-arduino = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
-latest_data = {"moisture": None, "water_dist": None}
+# ---------------- THREAD-SAFE QUEUE ----------------
+data_queue = queue.Queue()
 
+# ---------------- SERIAL READER THREAD ----------------
 def serial_reader():
-    global latest_data
+    try:
+        arduino = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
+    except Exception as e:
+        print("Serial error:", e)
+        return
+
+    latest = {"moisture": 0, "temperature": 0, "humidity": 0}
     while True:
         try:
-            line = arduino.readline().decode().strip()
+            line = arduino.readline().decode(errors="ignore").strip()
             if not line:
                 continue
-
             if line.startswith("MOISTURE:"):
-                latest_data["moisture"] = int(line.split(":")[1])
-            elif line.startswith("WATER_DIST:"):
-                latest_data["water_dist"] = int(line.split(":")[1])
-
-            # Save to DB when both values are present
-            if latest_data["moisture"] is not None and latest_data["water_dist"] is not None:
+                latest["moisture"] = int(line.split(":")[1])
+            elif line.startswith("TEMPERATURE:"):
+                latest["temperature"] = int(line.split(":")[1])
+            elif line.startswith("HUMIDITY:"):
+                latest["humidity"] = int(line.split(":")[1])
+                # once all three are present, push to queue & save DB
+                data_queue.put(latest.copy())
                 cur.execute(
-                    "INSERT INTO readings VALUES (?, ?, ?)",
+                    "INSERT INTO readings VALUES (?, ?, ?, ?)",
                     (datetime.now().isoformat(),
-                     latest_data["moisture"],
-                     latest_data["water_dist"])
+                     latest["moisture"],
+                     latest["temperature"],
+                     latest["humidity"])
                 )
                 conn.commit()
-
-        except:
-            pass
+        except Exception as e:
+            print("Serial error:", e)
 
 threading.Thread(target=serial_reader, daemon=True).start()
 
-# --------------------------
-# GUI SETUP
-# --------------------------
+# ---------------- GUI ----------------
 root = tk.Tk()
-root.title("Plant Watering System Dashboard")
-root.geometry("500x430")
-root.configure(bg="#c8f7c5")  # Light green background
+root.title("Plant Monitoring System")
+root.geometry("700x600")
+root.configure(bg="#c8f7c5")
 
-title = tk.Label(root,
-                 text="Plant Monitoring Dashboard",
-                 font=("Arial", 20, "bold"),
-                 bg="#c8f7c5",
-                 fg="#0652DD")   # blue
+title = tk.Label(root, text="🌱 Plant Monitoring System",
+                 font=("Arial", 22, "bold"),
+                 bg="#c8f7c5", fg="#0652DD")
 title.pack(pady=10)
 
-frame = tk.Frame(root, bg="#c8f7c5")
-frame.pack(pady=20)
+# Container for pages
+container = tk.Frame(root, bg="#c8f7c5")
+container.pack(fill="both", expand=True)
 
-moisture_label = tk.Label(frame, text="Soil Moisture: --%", font=("Arial", 16), bg="#c8f7c5")
-water_label = tk.Label(frame, text="Water Tank Distance: -- cm", font=("Arial", 16), bg="#c8f7c5")
+latest_data = {"moisture": 0, "temperature": 0, "humidity": 0}
 
+# ---------------- PAGES ----------------
+# --- Dashboard Page ---
+dashboard_frame = tk.Frame(container, bg="#c8f7c5")
+moisture_label = tk.Label(dashboard_frame, text="Soil Moisture: --%",
+                          font=("Arial", 18), bg="#c8f7c5")
+temperature_label = tk.Label(dashboard_frame, text="Temperature: --°C",
+                             font=("Arial", 18), bg="#c8f7c5")
+humidity_label = tk.Label(dashboard_frame, text="Humidity: --%",
+                          font=("Arial", 18), bg="#c8f7c5")
 moisture_label.pack(pady=5)
-water_label.pack(pady=5)
+temperature_label.pack(pady=5)
+humidity_label.pack(pady=5)
 
-# --------------------------
-# GUI UPDATE LOOP
-# --------------------------
-def update_gui():
-    if latest_data["moisture"] is not None:
-        moisture_label.config(text=f"Soil Moisture: {latest_data['moisture']}%")
-    if latest_data["water_dist"] is not None:
-        water_label.config(text=f"Water Tank Distance: {latest_data['water_dist']} cm")
-    root.after(1000, update_gui)
+# --- History Page ---
+history_frame = tk.Frame(container, bg="#c8f7c5")
+history_table = ttk.Treeview(history_frame,
+                             columns=("time","moisture","temp","hum"),
+                             show="headings")
+history_table.heading("time", text="Timestamp")
+history_table.heading("moisture", text="Moisture (%)")
+history_table.heading("temp", text="Temperature (°C)")
+history_table.heading("hum", text="Humidity (%)")
+history_table.pack(fill="both", expand=True)
 
-update_gui()
+# --- Graphs Page ---
+graphs_frame = tk.Frame(container, bg="#c8f7c5")
 
-# --------------------------
-# HISTORY WINDOW
-# --------------------------
-def open_history():
-    win = tk.Toplevel(root)
-    win.title("Reading History")
-    win.geometry("500x400")
+# Global references for live graph update
+canvas_widget = None
+fig = None
+ax1 = ax2 = ax3 = None
 
-    tree = ttk.Treeview(win, columns=("time", "moisture", "dist"), show="headings")
-    tree.heading("time", text="Timestamp")
-    tree.heading("moisture", text="Moisture")
-    tree.heading("dist", text="Water Distance")
-    tree.pack(fill="both", expand=True)
+# ---------------- PAGE SWITCHING ----------------
+def show_frame(frame):
+    for f in (dashboard_frame, history_frame, graphs_frame):
+        f.pack_forget()
+    frame.pack(fill="both", expand=True)
 
-    cur.execute("SELECT * FROM readings ORDER BY timestamp DESC LIMIT 200")
+# ---------------- DASHBOARD UPDATE ----------------
+def update_dashboard():
+    # read from queue
+    try:
+        while not data_queue.empty():
+            latest = data_queue.get_nowait()
+            latest_data.update(latest)
+    except queue.Empty:
+        pass
+
+    moisture_label.config(text=f"Soil Moisture: {latest_data['moisture']}%")
+    temperature_label.config(text=f"Temperature: {latest_data['temperature']}°C")
+    humidity_label.config(text=f"Humidity: {latest_data['humidity']}%")
+    root.after(1000, update_dashboard)
+
+# ---------------- HISTORY UPDATE ----------------
+def update_history():
+    for row in history_table.get_children():
+        history_table.delete(row)
+    cur.execute("SELECT * FROM readings ORDER BY timestamp DESC LIMIT 300")
     for row in cur.fetchall():
-        tree.insert("", "end", values=row)
+        history_table.insert("", "end", values=row)
 
-# --------------------------
-# GRAPH WINDOW
-# --------------------------
-def open_graphs():
-    cur.execute("SELECT timestamp, moisture, water_dist FROM readings ORDER BY timestamp ASC")
+# ---------------- GRAPHS UPDATE ----------------
+def init_graphs():
+    """Initialize matplotlib figure & axes once."""
+    global fig, ax1, ax2, ax3, canvas_widget
+    fig, (ax1, ax2, ax3) = plt.subplots(3,1,figsize=(7,6))
+    fig.tight_layout(pad=3)
+
+    canvas_widget = FigureCanvasTkAgg(fig, master=graphs_frame)
+    canvas_widget.draw()
+    canvas_widget.get_tk_widget().pack(fill="both", expand=True)
+    update_graphs()  # start live updates
+
+def update_graphs():
+    global fig, ax1, ax2, ax3, canvas_widget
+    # Clear previous plots
+    ax1.cla()
+    ax2.cla()
+    ax3.cla()
+
+    # Fetch all readings
+    cur.execute("SELECT timestamp, moisture, temperature, humidity FROM readings ORDER BY timestamp ASC")
     rows = cur.fetchall()
+    if len(rows) == 0:
+        ax1.set_title("No data yet")
+        ax2.set_title("No data yet")
+        ax3.set_title("No data yet")
+    else:
+        timestamps = [datetime.fromisoformat(r[0]) for r in rows]
+        moisture = [r[1] for r in rows]
+        temperature = [r[2] for r in rows]
+        humidity = [r[3] for r in rows]
 
-    if len(rows) < 2:
-        print("Not enough data for graphs.")
-        return
+        ax1.plot(timestamps, moisture, color='blue')
+        ax1.set_title("Soil Moisture Over Time")
+        ax1.set_ylabel("%")
 
-    timestamps = [datetime.fromisoformat(r[0]) for r in rows]
-    moisture = [r[1] for r in rows]
-    water = [r[2] for r in rows]
+        ax2.plot(timestamps, temperature, color='red')
+        ax2.set_title("Temperature Over Time")
+        ax2.set_ylabel("°C")
 
-    plt.figure(figsize=(10,6))
+        ax3.plot(timestamps, humidity, color='green')
+        ax3.set_title("Humidity Over Time")
+        ax3.set_ylabel("%")
 
-    # Moisture graph
-    plt.subplot(2,1,1)
-    plt.plot(timestamps, moisture)
-    plt.title("Soil Moisture Over Time")
-    plt.ylabel("Moisture (%)")
+    canvas_widget.draw()
+    root.after(3000, update_graphs)  # update every 3 seconds
 
-    # Water distance graph
-    plt.subplot(2,1,2)
-    plt.plot(timestamps, water)
-    plt.title("Water Level Distance Over Time")
-    plt.ylabel("Distance (cm)")
+# ---------------- BUTTONS ----------------
+button_frame = tk.Frame(root, bg="#c8f7c5")
+button_frame.pack(pady=10)
+tk.Button(button_frame, text="Dashboard", bg="#74b9ff", fg="white",
+          command=lambda: show_frame(dashboard_frame)).grid(row=0,column=0,padx=5)
+tk.Button(button_frame, text="History", bg="#74b9ff", fg="white",
+          command=lambda:[show_frame(history_frame), update_history()]).grid(row=0,column=1,padx=5)
+tk.Button(button_frame, text="Graphs", bg="#55efc4", fg="black",
+          command=lambda:[show_frame(graphs_frame), init_graphs()]).grid(row=0,column=2,padx=5)
 
-    plt.tight_layout()
-    plt.show()
-
-# --------------------------
-# BUTTONS
-# --------------------------
-history_btn = tk.Button(root,
-                        text="View History",
-                        font=("Arial", 14),
-                        bg="#74b9ff", fg="white",
-                        command=open_history)
-history_btn.pack(pady=10)
-
-graph_btn = tk.Button(root,
-                      text="View Graphs",
-                      font=("Arial", 14),
-                      bg="#55efc4", fg="black",
-                      command=open_graphs)
-graph_btn.pack(pady=10)
-
+# ---------------- STARTUP ----------------
+show_frame(dashboard_frame)
+update_dashboard()
 root.mainloop()
