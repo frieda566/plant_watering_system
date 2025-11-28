@@ -65,6 +65,7 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
   - Trend Analysis:  to see how the plant’s environment changes.
   - Animated LED Effects: Instead of just static colors, use patterns to show the plant’s “mood” (slow breathing effect = healthy, blinking = thirsty).
   - screen
+  - meanwhile Paula occupied herself with a possible container for our project as we didn't want to have that many cables flying around - she started researching 3D printing and we thought about printing it in the Digi Lab 
 
 ### 24.11.2025
 -	As we conducted this meeting in the KLIPPO we decided to not incorporate the buzzer 
@@ -84,6 +85,20 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
 -	tried it out despite that – installed LiquidCrystal_I2C.h 
   - it lit up a bit yet nothing else happened - we weren't sure if we had gotten the connections right - so we wrote that question down for the next time we had class 
 
+### 28.11.2025 
+- we started by putting up the small LED to see if it works - we used the following tutorial: https://docs.arduino.cc/learn/electronics/lcd-displays/
+- the screen finally lit up and then we changed our Arduino IDE code to actually print something on the screen 
+- meanwhile Frieda tested out a possible code on Python to see if the interface worked and the code ran correctly with no problems - when combining Python with Arduino it is important to mention in your Python code which port your Arduino board is plugged into 
+- Furthermore, we brainstormed what further additions could be implemented 
+  - we thought about adding a tiny plant lexicon on our python interface so that users could look up typical plants and what further type of care is possible 
+  - moreover, we want to add a graph which basically represents how the plant the Arduino is "connected to" is doing 
+- currently our setup looked like this:
+![setup](images/setup_28.11.2025.jpg) 
+- LED screen worked and printed the temperature, soil moisture and humidity as well as if the pump is on yet the temperature, soil moisture and humidity didn't show any or non correct numbers 
+- we then found out that we hadn't connected the digital pin correctly to the sensor (https://projecthub.arduino.cc/rudraksh2008/temperature-and-humidity-sensor-with-arduino-1d52a6) - after that we got correct numbers 
+![LED_screen](images/LED_screen.jpg)
+- next we added our distance measure sensor and started to setup the whole setup with water and so on to test it out 
+- but the pump didn't work - we checked the cables but everything seemed to be wired correctly 
 
 
 
