@@ -100,6 +100,15 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
 - next we added our distance measure sensor and started to setup the whole setup with water and so on to test it out 
 - but the pump didn't work - we checked the cables but everything seemed to be wired correctly 
 
+### 30.11.2025 
+- today Frieda started to implement a plant dictionary 
+- for this she researched on the matter and found this pre defined excel sheet on reddit - https://docs.google.com/spreadsheets/d/1RArYadwipMGp9QFCYqbUTmwvCPyvwURWf7hIABg2n14/edit?gid=0#gid=0
+- she then proceeded to turn it into a csv to make it compatible with Python 
+- then she added it into the GUI and called it in the plant watering systems interface python code 
+- from there she got inspired by our previous code from Tech Basics I - scrollbar, buttons and so on 
+- additionally she changed the basic idea by adding a class and started to use tk and so on to ensure a nice and simple interface with matching colors 
+- sadly the lexicon interfaces' screen width and height doesn't match what it would actually need - we are searching for a solution for this problem 
+
 
 
 
