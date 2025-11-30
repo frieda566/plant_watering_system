@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, font
 import sqlite3, threading, queue, pandas as pd
+import json
+import os
 from datetime import datetime
 
 class PlantMonitoringApp:
@@ -19,6 +21,12 @@ class PlantMonitoringApp:
             "sage": "#B0CC99",
             "brown": "#89725B",
         }
+
+        # history
+        self.history_file = "plant_history.json"
+        if not os.path.exists(self.history_file):
+            with open(self.history_file, "w") as f:
+                json.dump([], f)  # start with empty list
 
         # ---------- Data / DB ----------
         self.data_queue = queue.Queue()
@@ -98,6 +106,40 @@ class PlantMonitoringApp:
         )
         return ttk.Scrollbar(parent, orient="vertical", style="Custom.Vertical.TScrollbar")
 
+    def save_daily_reading(self):
+        now = datetime.now()
+        # Only record if current time is 2 PM and not already saved today
+        if now.hour == 14:
+            data = []
+            if os.path.exists(self.history_file):
+                with open(self.history_file, "r") as f:
+                    data = json.load(f)
+
+            # Check if already saved today
+            today_str = now.strftime("%Y-%m-%d")
+            if data and data[-1]["timestamp"].startswith(today_str):
+                return  # already saved for today
+
+            # Add new reading
+            data.append({
+                "timestamp": now.strftime("%Y-%m-%d %H:%M:%S"),
+                "moisture": self.latest_data["moisture"],
+                "temperature": self.latest_data["temperature"],
+                "humidity": self.latest_data["humidity"]
+            })
+
+            with open(self.HISTORY_FILE, "w") as f:
+                json.dump(data, f, indent=4)
+
+    def load_history(self):
+        if os.path.exists(self.history_file):
+            with open(self.history_file, "r") as f:
+                data = json.load(f)
+            # reverse to show newest first
+            data.sort(key=lambda x: x["timestamp"], reverse=True)
+            return data
+        return []
+
     # ---------------- Back to Menu ----------------
     def back_to_menu_button(self, parent):
         self.create_styled_button(parent, "← Back to Menu", self.setup_main_menu)
@@ -129,6 +171,10 @@ class PlantMonitoringApp:
             self.moisture_label.config(text=f"Soil Moisture: {self.latest_data['moisture']}%")
             self.temperature_label.config(text=f"Temperature: {self.latest_data['temperature']}°C")
             self.humidity_label.config(text=f"Humidity: {self.latest_data['humidity']}%")
+
+            # Save daily reading if 2 PM
+            self.save_daily_reading()
+
             self.root.after(1000, self.update_dashboard)
 
     # ---------------- History ----------------
@@ -138,16 +184,19 @@ class PlantMonitoringApp:
         frame.pack(fill="both", expand=True, padx=20, pady=20)
 
         tk.Label(frame, text="📜 History", font=("Helvetica", 20, "bold"),
-                 bg=self.colors["cream"], fg=self.colors["dark_green"]).pack(pady=10)
+                    bg=self.colors["cream"], fg=self.colors["dark_green"]).pack(pady=10)
 
-        table = ttk.Treeview(frame, columns=("time","moisture","temp","hum"), show="headings")
+        table = ttk.Treeview(frame, columns=("time", "moisture", "temp", "hum"), show="headings")
         table.heading("time", text="Timestamp")
         table.heading("moisture", text="Moisture (%)")
         table.heading("temp", text="Temperature (°C)")
         table.heading("hum", text="Humidity (%)")
         table.pack(fill="both", expand=True)
         self.history_table = table
-        self.update_history()
+
+        # populate table from JSON
+        for row in self.load_history():
+            table.insert("", "end", values=(row["timestamp"], row["moisture"], row["temperature"], row["humidity"]))
 
         self.back_to_menu_button(frame)
 
