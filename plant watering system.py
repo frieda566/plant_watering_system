@@ -1,204 +1,303 @@
-import serial
-import sqlite3
-import threading
-import queue
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, font
+import sqlite3, threading, queue, pandas as pd
 from datetime import datetime
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-# ---------------- CONFIG ----------------
-SERIAL_PORT = "/dev/cu.usbmodem1101"  # change to your port
-BAUD_RATE = 9600
+class PlantMonitoringApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Plant Monitoring System")
+        self._original_bg = "#55aa55"  # main menu background green
+        self.root.configure(bg=self._original_bg)
 
-# ---------------- DATABASE ----------------
-conn = sqlite3.connect("plant_data.db", check_same_thread=False)
-cur = conn.cursor()
-cur.execute("""
-CREATE TABLE IF NOT EXISTS readings (
-    timestamp TEXT,
-    moisture INTEGER,
-    temperature INTEGER,
-    humidity INTEGER
-)
-""")
-conn.commit()
+        # ---------- Colors ----------
+        self.colors = {
+            "green_bg": "#677E52",  # main menu
+            "cream": "#F6E8B1",  # popup / internal frames
+            "dark_green": "#677E52",
+            "lime": "#B7CA79",
+            "sage": "#B0CC99",
+            "brown": "#89725B",
+        }
 
-# ---------------- THREAD-SAFE QUEUE ----------------
-data_queue = queue.Queue()
+        # ---------- Data / DB ----------
+        self.data_queue = queue.Queue()
+        self.latest_data = {"moisture": 0, "temperature": 0, "humidity": 0}
+        self.conn = sqlite3.connect("plant_data.db", check_same_thread=False)
+        self.cur = self.conn.cursor()
+        self.cur.execute("""
+            CREATE TABLE IF NOT EXISTS readings (
+                timestamp TEXT, moisture INTEGER, temperature INTEGER, humidity INTEGER
+            )
+        """)
+        self.conn.commit()
 
-# ---------------- SERIAL READER THREAD ----------------
-def serial_reader():
-    try:
-        arduino = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
-    except Exception as e:
-        print("Serial error:", e)
-        return
+        # ---------- Load Lexicon ----------
+        self.lexicon_df = pd.read_csv("plant_care_lexicon.csv")
+        self.lexicon_df.columns = [c.strip() for c in self.lexicon_df.columns]
+        # sort alphabetically
+        self.lexicon_df = self.lexicon_df.sort_values(by="Plant Name", key=lambda col: col.str.lower())
 
-    latest = {"moisture": 0, "temperature": 0, "humidity": 0}
-    while True:
-        try:
-            line = arduino.readline().decode(errors="ignore").strip()
-            if not line:
-                continue
-            if line.startswith("MOISTURE:"):
-                latest["moisture"] = int(line.split(":")[1])
-            elif line.startswith("TEMPERATURE:"):
-                latest["temperature"] = int(line.split(":")[1])
-            elif line.startswith("HUMIDITY:"):
-                latest["humidity"] = int(line.split(":")[1])
-                # once all three are present, push to queue & save DB
-                data_queue.put(latest.copy())
-                cur.execute(
-                    "INSERT INTO readings VALUES (?, ?, ?, ?)",
-                    (datetime.now().isoformat(),
-                     latest["moisture"],
-                     latest["temperature"],
-                     latest["humidity"])
-                )
-                conn.commit()
-        except Exception as e:
-            print("Serial error:", e)
+        # ---------- Main Menu ----------
+        self.setup_main_menu()
 
-threading.Thread(target=serial_reader, daemon=True).start()
+    # ---------------- Main Menu ----------------
+    def setup_main_menu(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        self.root.configure(bg=self.colors["green_bg"])
 
-# ---------------- GUI ----------------
-root = tk.Tk()
-root.title("Plant Monitoring System")
-root.geometry("700x600")
-root.configure(bg="#c8f7c5")
+        # master frame
+        main_frame = tk.Frame(self.root, bg=self.colors["green_bg"])
+        main_frame.pack(fill="both", expand=True, padx=30, pady=30)
 
-title = tk.Label(root, text="🌱 Plant Monitoring System",
-                 font=("Arial", 22, "bold"),
-                 bg="#c8f7c5", fg="#0652DD")
-title.pack(pady=10)
+        # headline
+        title_font = font.Font(family="Helvetica", size=24, weight="bold")
+        tk.Label(main_frame, text="🌱 Plant Monitoring System",
+                 font=title_font, bg=self.colors["green_bg"], fg="white").pack(pady=(20,40))
 
-# Container for pages
-container = tk.Frame(root, bg="#c8f7c5")
-container.pack(fill="both", expand=True)
+        # menu buttons
+        button_frame = tk.Frame(main_frame, bg=self.colors["green_bg"])
+        button_frame.pack()
 
-latest_data = {"moisture": 0, "temperature": 0, "humidity": 0}
+        self.create_styled_button(button_frame, "📊 Dashboard", self.show_dashboard)
+        self.create_styled_button(button_frame, "📜 History", self.show_history)
+        self.create_styled_button(button_frame, "📈 Graphs", self.show_graphs)
+        self.create_styled_button(button_frame, "🌿 Lexicon", self.show_lexicon)
+        self.create_styled_button(button_frame, "❌ Exit", self.root.quit)
 
-# ---------------- PAGES ----------------
-# --- Dashboard Page ---
-dashboard_frame = tk.Frame(container, bg="#c8f7c5")
-moisture_label = tk.Label(dashboard_frame, text="Soil Moisture: --%",
-                          font=("Arial", 18), bg="#c8f7c5")
-temperature_label = tk.Label(dashboard_frame, text="Temperature: --°C",
-                             font=("Arial", 18), bg="#c8f7c5")
-humidity_label = tk.Label(dashboard_frame, text="Humidity: --%",
-                          font=("Arial", 18), bg="#c8f7c5")
-moisture_label.pack(pady=5)
-temperature_label.pack(pady=5)
-humidity_label.pack(pady=5)
+    # ---------------- Styled Button ----------------
+    def create_styled_button(self, parent, text, command):
+        outer = tk.Frame(parent, bg=self.colors["brown"])
+        outer.pack(pady=8)
+        inner = tk.Frame(outer, bg=self.colors["lime"])
+        inner.pack(padx=3, pady=3)
+        btn = tk.Button(inner, text=text, font=("Helvetica", 14, "bold"),
+                        bg=self.colors["lime"], fg=self.colors["dark_green"],
+                        relief="flat", bd=0, padx=20, pady=12,
+                        cursor="hand2", command=command)
+        btn.pack()
+        # hover effect
+        btn.bind("<Enter>", lambda e: (btn.config(bg=self.colors["sage"]), inner.config(bg=self.colors["sage"])))
+        btn.bind("<Leave>", lambda e: (btn.config(bg=self.colors["lime"]), inner.config(bg=self.colors["lime"])))
+        return btn
 
-# --- History Page ---
-history_frame = tk.Frame(container, bg="#c8f7c5")
-history_table = ttk.Treeview(history_frame,
-                             columns=("time","moisture","temp","hum"),
-                             show="headings")
-history_table.heading("time", text="Timestamp")
-history_table.heading("moisture", text="Moisture (%)")
-history_table.heading("temp", text="Temperature (°C)")
-history_table.heading("hum", text="Humidity (%)")
-history_table.pack(fill="both", expand=True)
+    #----------------- Styled Scrollbar ---------------
+    # custom vertical scrollbar styled to palette
+    def create_styled_scrollbar(self, parent):
+        style = ttk.Style()
+        style.theme_use("clam")
+        style.configure(
+            "Custom.Vertical.TScrollbar",
+            background=self.colors["sage"],
+            troughcolor=self.colors["cream"],
+            bordercolor=self.colors["brown"],
+            arrowcolor=self.colors["dark_green"],
+            darkcolor=self.colors["brown"],
+            lightcolor=self.colors["lime"],
+        )
+        return ttk.Scrollbar(parent, orient="vertical", style="Custom.Vertical.TScrollbar")
 
-# --- Graphs Page ---
-graphs_frame = tk.Frame(container, bg="#c8f7c5")
+    # ---------------- Back to Menu ----------------
+    def back_to_menu_button(self, parent):
+        self.create_styled_button(parent, "← Back to Menu", self.setup_main_menu)
 
-# Global references for live graph update
-canvas_widget = None
-fig = None
-ax1 = ax2 = ax3 = None
+    # ---------------- Dashboard ----------------
+    def show_dashboard(self):
+        self.clear_window()
+        frame = tk.Frame(self.root, bg=self.colors["cream"])
+        frame.pack(fill="both", expand=True, padx=20, pady=20)
 
-# ---------------- PAGE SWITCHING ----------------
-def show_frame(frame):
-    for f in (dashboard_frame, history_frame, graphs_frame):
-        f.pack_forget()
-    frame.pack(fill="both", expand=True)
+        tk.Label(frame, text="📊 Dashboard", font=("Helvetica", 20, "bold"),
+                 bg=self.colors["cream"], fg=self.colors["dark_green"]).pack(pady=10)
 
-# ---------------- DASHBOARD UPDATE ----------------
-def update_dashboard():
-    # read from queue
-    try:
-        while not data_queue.empty():
-            latest = data_queue.get_nowait()
-            latest_data.update(latest)
-    except queue.Empty:
-        pass
+        # live data labels
+        self.moisture_label = tk.Label(frame, text="Soil Moisture: --%",
+                                       font=("Helvetica", 16), bg=self.colors["cream"])
+        self.temperature_label = tk.Label(frame, text="Temperature: --°C",
+                                          font=("Helvetica", 16), bg=self.colors["cream"])
+        self.humidity_label = tk.Label(frame, text="Humidity: --%",
+                                       font=("Helvetica", 16), bg=self.colors["cream"])
+        for lbl in (self.moisture_label, self.temperature_label, self.humidity_label):
+            lbl.pack(pady=5)
 
-    moisture_label.config(text=f"Soil Moisture: {latest_data['moisture']}%")
-    temperature_label.config(text=f"Temperature: {latest_data['temperature']}°C")
-    humidity_label.config(text=f"Humidity: {latest_data['humidity']}%")
-    root.after(1000, update_dashboard)
+        self.back_to_menu_button(frame)
+        self.update_dashboard()
 
-# ---------------- HISTORY UPDATE ----------------
-def update_history():
-    for row in history_table.get_children():
-        history_table.delete(row)
-    cur.execute("SELECT * FROM readings ORDER BY timestamp DESC LIMIT 300")
-    for row in cur.fetchall():
-        history_table.insert("", "end", values=row)
+    def update_dashboard(self):
+        if hasattr(self, "moisture_label") and self.moisture_label.winfo_exists():
+            self.moisture_label.config(text=f"Soil Moisture: {self.latest_data['moisture']}%")
+            self.temperature_label.config(text=f"Temperature: {self.latest_data['temperature']}°C")
+            self.humidity_label.config(text=f"Humidity: {self.latest_data['humidity']}%")
+            self.root.after(1000, self.update_dashboard)
 
-# ---------------- GRAPHS UPDATE ----------------
-def init_graphs():
-    """Initialize matplotlib figure & axes once."""
-    global fig, ax1, ax2, ax3, canvas_widget
-    fig, (ax1, ax2, ax3) = plt.subplots(3,1,figsize=(7,6))
-    fig.tight_layout(pad=3)
+    # ---------------- History ----------------
+    def show_history(self):
+        self.clear_window()
+        frame = tk.Frame(self.root, bg=self.colors["cream"])
+        frame.pack(fill="both", expand=True, padx=20, pady=20)
 
-    canvas_widget = FigureCanvasTkAgg(fig, master=graphs_frame)
-    canvas_widget.draw()
-    canvas_widget.get_tk_widget().pack(fill="both", expand=True)
-    update_graphs()  # start live updates
+        tk.Label(frame, text="📜 History", font=("Helvetica", 20, "bold"),
+                 bg=self.colors["cream"], fg=self.colors["dark_green"]).pack(pady=10)
 
-def update_graphs():
-    global fig, ax1, ax2, ax3, canvas_widget
-    # Clear previous plots
-    ax1.cla()
-    ax2.cla()
-    ax3.cla()
+        table = ttk.Treeview(frame, columns=("time","moisture","temp","hum"), show="headings")
+        table.heading("time", text="Timestamp")
+        table.heading("moisture", text="Moisture (%)")
+        table.heading("temp", text="Temperature (°C)")
+        table.heading("hum", text="Humidity (%)")
+        table.pack(fill="both", expand=True)
+        self.history_table = table
+        self.update_history()
 
-    # Fetch all readings
-    cur.execute("SELECT timestamp, moisture, temperature, humidity FROM readings ORDER BY timestamp ASC")
-    rows = cur.fetchall()
-    if len(rows) == 0:
-        ax1.set_title("No data yet")
-        ax2.set_title("No data yet")
-        ax3.set_title("No data yet")
-    else:
-        timestamps = [datetime.fromisoformat(r[0]) for r in rows]
-        moisture = [r[1] for r in rows]
-        temperature = [r[2] for r in rows]
-        humidity = [r[3] for r in rows]
+        self.back_to_menu_button(frame)
 
-        ax1.plot(timestamps, moisture, color='blue')
-        ax1.set_title("Soil Moisture Over Time")
-        ax1.set_ylabel("%")
+    def update_history(self):
+        if hasattr(self, "history_table") and self.history_table.winfo_exists():
+            for row in self.history_table.get_children():
+                self.history_table.delete(row)
+            self.cur.execute("SELECT * FROM readings ORDER BY timestamp DESC LIMIT 100")
+            for row in self.cur.fetchall():
+                self.history_table.insert("", "end", values=row)
+            self.root.after(3000, self.update_history)
 
-        ax2.plot(timestamps, temperature, color='red')
-        ax2.set_title("Temperature Over Time")
-        ax2.set_ylabel("°C")
+    # ---------------- Graphs ----------------
+    def show_graphs(self):
+        self.clear_window()
+        frame = tk.Frame(self.root, bg=self.colors["cream"])
+        frame.pack(fill="both", expand=True, padx=20, pady=20)
 
-        ax3.plot(timestamps, humidity, color='green')
-        ax3.set_title("Humidity Over Time")
-        ax3.set_ylabel("%")
+        tk.Label(frame, text="📈 Graphs", font=("Helvetica", 20, "bold"),
+                 bg=self.colors["cream"], fg=self.colors["dark_green"]).pack(pady=10)
 
-    canvas_widget.draw()
-    root.after(3000, update_graphs)  # update every 3 seconds
+        # placeholder: can embed matplotlib graph here
+        tk.Label(frame, text="Graphs would appear here", bg=self.colors["cream"]).pack(pady=50)
 
-# ---------------- BUTTONS ----------------
-button_frame = tk.Frame(root, bg="#c8f7c5")
-button_frame.pack(pady=10)
-tk.Button(button_frame, text="Dashboard", bg="#74b9ff", fg="white",
-          command=lambda: show_frame(dashboard_frame)).grid(row=0,column=0,padx=5)
-tk.Button(button_frame, text="History", bg="#74b9ff", fg="white",
-          command=lambda:[show_frame(history_frame), update_history()]).grid(row=0,column=1,padx=5)
-tk.Button(button_frame, text="Graphs", bg="#55efc4", fg="black",
-          command=lambda:[show_frame(graphs_frame), init_graphs()]).grid(row=0,column=2,padx=5)
+        self.back_to_menu_button(frame)
 
-# ---------------- STARTUP ----------------
-show_frame(dashboard_frame)
-update_dashboard()
-root.mainloop()
+    # ---------------- Lexicon ----------------
+    def show_lexicon(self):
+        self.clear_window()
+
+        main_frame = tk.Frame(self.root, bg=self.colors["cream"])
+        main_frame.pack(fill="both", expand=True, padx=20, pady=20)
+
+        # Header
+        header_frame = tk.Frame(main_frame, bg=self.colors["cream"])
+        header_frame.pack(fill="x", pady=(10, 0))
+        title_font = font.Font(family="Helvetica", size=20, weight="bold")
+        tk.Label(header_frame, text="🌿 Lexicon", font=title_font,
+                 bg=self.colors["cream"], fg=self.colors["dark_green"]).pack()
+
+        # Search bar
+        self.search_var = tk.StringVar()
+        self.search_var.trace('w', self.filter_plants)  # <--- updated
+
+        search_container = tk.Frame(main_frame, bg=self.colors["cream"])
+        search_container.pack(pady=(10, 20))
+        search_entry = tk.Entry(search_container, textvariable=self.search_var, width=50,
+                                font=("Helvetica", 12), bg=self.colors["lime"],
+                                fg=self.colors["dark_green"], relief="flat", bd=5,
+                                insertbackground=self.colors["dark_green"])
+        search_entry.pack(pady=5)
+
+        # Scrollable container for plants
+        self.scroll_container = tk.Frame(main_frame, bg=self.colors["cream"])
+        self.scroll_container.pack(fill="both", expand=True)
+
+        canvas = tk.Canvas(self.scroll_container, bg=self.colors["cream"], highlightthickness=0)
+        scrollbar = self.create_styled_scrollbar(self.scroll_container)
+        scrollbar.config(command=canvas.yview)
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        self.scroll_frame = tk.Frame(canvas, bg=self.colors["cream"])
+        canvas.create_window((0, 0), window=self.scroll_frame, anchor="nw")
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        self.scroll_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+
+        # Render all plant cards
+        self.plant_cards = []  # store references to cards for filtering
+        for _, row in self.lexicon_df.iterrows():
+            card = tk.Frame(self.scroll_frame, bg=self.colors["brown"], bd=0, relief="ridge")
+            card.pack(fill="x", pady=5, padx=5)
+
+            inner = tk.Frame(card, bg=self.colors["sage"], padx=5, pady=5)
+            inner.pack(fill="both", expand=True)
+
+            tk.Label(inner, text=row["Plant Name"], font=("Helvetica", 14, "bold"),
+                     bg=self.colors["sage"], fg=self.colors["dark_green"]).pack(side="left", padx=10)
+
+            tk.Button(inner, text="Details", font=("Helvetica", 12, "bold"),
+                      bg=self.colors["lime"], fg=self.colors["dark_green"],
+                      relief="flat", bd=0, cursor="hand2",
+                      command=lambda r=row: self.show_lexicon_popup(r)).pack(side="right", padx=10)
+
+            self.plant_cards.append((card, row["Plant Name"].lower()))
+
+        # Back button
+        self.back_to_menu_button(main_frame)
+
+    # ---------------- Lexicon Filter ----------------
+    def filter_plants(self, *args):
+        query = self.search_var.get().lower()
+        for card, name in self.plant_cards:
+            if query in name:
+                card.pack(fill="x", pady=5, padx=5)
+            else:
+                card.pack_forget()
+
+    # ---------------- Lexicon Popup ----------------
+    def show_lexicon_popup(self, row):
+        popup = tk.Toplevel(self.root)
+        popup.title(row["Plant Name"])
+        popup.configure(bg=self.colors["cream"])
+        popup.geometry("500x500")  # larger size
+
+        # Scrollable container
+        canvas = tk.Canvas(popup, bg=self.colors["cream"], highlightthickness=0)
+        scrollbar = self.create_styled_scrollbar(popup)
+        scrollbar.config(command=canvas.yview)
+        scroll_frame = tk.Frame(canvas, bg=self.colors["cream"])
+        scroll_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        canvas.create_window((0, 0), window=scroll_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        def add_info_line(parent, headline, value):
+            # headline label
+            tk.Label(parent, text=headline, font=("Helvetica", 14, "bold"),
+                     bg=self.colors["cream"], fg=self.colors["dark_green"], anchor="w").pack(fill="x", padx=10,
+                                                                                             pady=(10, 0))
+            # value label
+            tk.Label(parent, text=value, font=("Helvetica", 12),
+                     bg=self.colors["cream"], fg=self.colors["dark_green"], anchor="w", justify="left",
+                     wraplength=450).pack(fill="x", padx=20, pady=(0, 5))
+            # horizontal line separator
+            ttk.Separator(parent, orient="horizontal").pack(fill="x", padx=10, pady=5)
+
+        # full plant info
+        add_info_line(scroll_frame, "🌞 Light Preferences:", row['Light Preferences'])
+        add_info_line(scroll_frame, "💧 Watering:", row['Watering'])
+        add_info_line(scroll_frame, "🪴 Soil Type / Drainage:", row.get('Soil Type/Drainage', 'N/A'))
+        add_info_line(scroll_frame, "🌡️ Temp / Humidity:", row.get('Temp / Humidity', 'N/A'))
+        add_info_line(scroll_frame, "📏 Height Growth:", row.get('Height Growth', 'N/A'))
+        add_info_line(scroll_frame, "⚠️ Common Problems:", row.get('Common Problems', 'N/A'))
+        add_info_line(scroll_frame, "🌱 Propagation:", row.get('Propagation', 'N/A'))
+        add_info_line(scroll_frame, "☠️ Toxicity:", row.get('Toxicity', 'N/A'))
+
+        # Close button
+        self.create_styled_button(scroll_frame, "✓ Close", popup.destroy)
+
+    # ---------------- Utility ----------------
+    def clear_window(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+# ---------------- Launch ----------------
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = PlantMonitoringApp(root)
+    root.mainloop()
+
