@@ -283,8 +283,12 @@ class PlantMonitoringApp:
             card = tk.Frame(self.scroll_frame, bg=self.colors["brown"], bd=0, relief="ridge")
             card.pack(fill="x", pady=5, padx=5)
 
-            inner = tk.Frame(card, bg=self.colors["sage"], padx=10, pady=8)
-            inner.pack(fill="both", expand=True)
+            inner = tk.Frame(card, bg=self.colors["sage"], padx=10, pady=10)
+            inner.pack(fill="x", expand=True)
+
+            # prevent Tkinter from shrinking the frame
+            inner.pack_propagate(False)
+            inner.config(height=60)
 
             # Plant name label with weight to expand
             name_label = tk.Label(inner, text=row["Plant Name"], font=("Helvetica", 14, "bold"),
@@ -294,9 +298,9 @@ class PlantMonitoringApp:
             # Details button with fixed width
             details_btn = tk.Button(inner, text="Details", font=("Helvetica", 12, "bold"),
                                     bg=self.colors["lime"], fg=self.colors["dark_green"],
-                                    relief="flat", bd=0, cursor="hand2", width=10,
+                                    width=10, relief="flat", bd=0, cursor="hand2",
                                     command=lambda r=row: self.show_lexicon_popup(r))
-            details_btn.pack(side="right", padx=5)
+            details_btn.pack(side="right", padx=10)
 
             # Hover effect for button
             details_btn.bind("<Enter>", lambda e, btn=details_btn: btn.config(bg=self.colors["sage"]))
