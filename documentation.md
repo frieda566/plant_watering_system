@@ -109,9 +109,17 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
 - additionally she changed the basic idea by adding a class and started to use tk and so on to ensure a nice and simple interface with matching colors 
 - sadly the lexicon interfaces' screen width and height doesn't match what it would actually need - we are searching for a solution for this problem 
 
-
-
-
+- Paula in the meantime completed the Arduino watering system. 
+- Added all the gadgets and made them work all together
+  - for the Code: During initialization, the program sets up hardware interfaces for the serial monitor, LCD display, sensors, and outputs, and displays a welcome message. In the main loop, the system continuously reads sensor values for soil moisture, temperature, humidity, and water tank level. If the DHT sensor fails, error handling routines display an error message and skip the watering cycle. The water tank level is checked via an ultrasonic sensor, activating an LED indicator if the water is low. Using the soil moisture reading, the system compares it against a preset threshold to decide when to run the pump. If watering occurs, the relay triggers the pump for 5 seconds and the system waits 30 seconds before proceeding. Throughout, real-time data and system status are shown on the LCD, and details of each cycle are logged to the serial output for debugging. Helper functions are used to convert the soil sensor’s raw values into percentages and to calculate water level distances from the ultrasonic sensor’s readings.
+- For this she used several sources (https://docs.arduino.cc/learn/electronics/lcd-displays/, https://projecthub.arduino.cc/lc_lab/automatic-watering-system-for-my-plants-e4c4b9, https://www.youtube.com/watch?v=w8Gyti0fwqI)
+- The most complicated thing was to get used to working in C++ with the Display and the Libray LiquidCrystal
+### 1.12.2025
+- tried to 3D print our model in the Digi Lab however we decided against it after we saw the printing time
+- ![time](time.jpg)
+- Therefore, we decided to go to Baumarkt and to build something by hand however this it how the container was supposed to look like:
+- ![3D-Front](3d-print1.png), ![3D-Side](3d-print2.png)
+- 
 
 
 
