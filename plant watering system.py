@@ -11,6 +11,8 @@ class PlantMonitoringApp:
         self.root.title("Plant Monitoring System")
         self._original_bg = "#55aa55"  # main menu background green
         self.root.configure(bg=self._original_bg)
+        self.root.geometry("900x700")
+        self.root.minsize(800, 600)
 
         # ---------- Colors ----------
         self.colors = {
@@ -250,6 +252,7 @@ class PlantMonitoringApp:
         search_entry.pack(pady=5)
 
         # Scrollable container for plants
+        # Scrollable container for plants
         self.scroll_container = tk.Frame(main_frame, bg=self.colors["cream"])
         self.scroll_container.pack(fill="both", expand=True)
 
@@ -259,11 +262,20 @@ class PlantMonitoringApp:
         canvas.configure(yscrollcommand=scrollbar.set)
 
         self.scroll_frame = tk.Frame(canvas, bg=self.colors["cream"])
-        canvas.create_window((0, 0), window=self.scroll_frame, anchor="nw")
+        canvas_window = canvas.create_window((0, 0), window=self.scroll_frame, anchor="nw")
 
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
-        self.scroll_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+
+        # Update scroll region and make scroll_frame expand with canvas width
+        def on_frame_configure(event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+
+        def on_canvas_configure(event):
+            canvas.itemconfig(canvas_window, width=event.width)
+
+        self.scroll_frame.bind("<Configure>", on_frame_configure)
+        canvas.bind("<Configure>", on_canvas_configure)
 
         # Render all plant cards
         self.plant_cards = []  # store references to cards for filtering
@@ -271,16 +283,24 @@ class PlantMonitoringApp:
             card = tk.Frame(self.scroll_frame, bg=self.colors["brown"], bd=0, relief="ridge")
             card.pack(fill="x", pady=5, padx=5)
 
-            inner = tk.Frame(card, bg=self.colors["sage"], padx=5, pady=5)
+            inner = tk.Frame(card, bg=self.colors["sage"], padx=10, pady=8)
             inner.pack(fill="both", expand=True)
 
-            tk.Label(inner, text=row["Plant Name"], font=("Helvetica", 14, "bold"),
-                     bg=self.colors["sage"], fg=self.colors["dark_green"]).pack(side="left", padx=10)
+            # Plant name label with weight to expand
+            name_label = tk.Label(inner, text=row["Plant Name"], font=("Helvetica", 14, "bold"),
+                                  bg=self.colors["sage"], fg=self.colors["dark_green"], anchor="w")
+            name_label.pack(side="left", fill="x", expand=True, padx=(0, 10))
 
-            tk.Button(inner, text="Details", font=("Helvetica", 12, "bold"),
-                      bg=self.colors["lime"], fg=self.colors["dark_green"],
-                      relief="flat", bd=0, cursor="hand2",
-                      command=lambda r=row: self.show_lexicon_popup(r)).pack(side="right", padx=10)
+            # Details button with fixed width
+            details_btn = tk.Button(inner, text="Details", font=("Helvetica", 12, "bold"),
+                                    bg=self.colors["lime"], fg=self.colors["dark_green"],
+                                    relief="flat", bd=0, cursor="hand2", width=10,
+                                    command=lambda r=row: self.show_lexicon_popup(r))
+            details_btn.pack(side="right", padx=5)
+
+            # Hover effect for button
+            details_btn.bind("<Enter>", lambda e, btn=details_btn: btn.config(bg=self.colors["sage"]))
+            details_btn.bind("<Leave>", lambda e, btn=details_btn: btn.config(bg=self.colors["lime"]))
 
             self.plant_cards.append((card, row["Plant Name"].lower()))
 
