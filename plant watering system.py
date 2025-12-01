@@ -251,7 +251,7 @@ class PlantMonitoringApp:
                                 insertbackground=self.colors["dark_green"])
         search_entry.pack(pady=5)
 
-        # Scrollable container for plants
+
         # Scrollable container for plants
         self.scroll_container = tk.Frame(main_frame, bg=self.colors["cream"])
         self.scroll_container.pack(fill="both", expand=True)
