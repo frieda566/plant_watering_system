@@ -130,7 +130,7 @@ class PlantMonitoringApp:
                 "humidity": self.latest_data["humidity"]
             })
 
-            with open(self.HISTORY_FILE, "w") as f:
+            with open(self.history_file, "w") as f:
                 json.dump(data, f, indent=4)
 
     def load_history(self):
