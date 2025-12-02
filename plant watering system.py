@@ -3,6 +3,8 @@ from tkinter import ttk, font
 import sqlite3, threading, queue, pandas as pd
 import json
 import os
+import pyserial
+import serial.tools.list_ports
 from datetime import datetime
 
 class PlantMonitoringApp:
@@ -41,6 +43,27 @@ class PlantMonitoringApp:
             )
         """)
         self.conn.commit()
+
+        # --------- Serial Setup (Arduino) ---------
+        self.serial_port = None
+        self.serial_running = True
+
+        # Try auto-detect Arduino COM port
+        ports = serial.tools.list_ports.comports()
+        for p in ports:
+            if "Arduino" in p.description or "CH340" in p.description:
+                self.serial_port = p.device
+                break
+
+        if self.serial_port is None:
+            print("⚠ No Arduino detected. Running without live data.")
+        else:
+            try:
+                self.serial = serial.Serial(self.serial_port, 9600, timeout=1)
+                threading.Thread(target=self.read_serial_loop, daemon=True).start()
+                print("✓ Serial connection established on:", self.serial_port)
+            except:
+                print("⚠ Could not open serial port.")
 
         # ---------- Load Lexicon ----------
         self.lexicon_df = pd.read_csv("plant_care_lexicon.csv")
@@ -178,6 +201,41 @@ class PlantMonitoringApp:
             self.save_daily_reading()
 
             self.root.after(1000, self.update_dashboard)
+
+    def read_serial_loop(self):
+        """Background thread reading Arduino messages."""
+        while self.serial_running:
+            try:
+                line = self.serial.readline().decode().strip()
+                if not line:
+                    continue
+
+                # Arduino should send something like:
+                # M:45,T:22,H:55
+                parts = line.split(",")
+                data = {}
+
+                for p in parts:
+                    if p.startswith("M:"):
+                        data["moisture"] = int(p[2:])
+                    elif p.startswith("T:"):
+                        data["temperature"] = int(p[2:])
+                    elif p.startswith("H:"):
+                        data["humidity"] = int(p[2:])
+
+                if len(data) == 3:
+                    self.latest_data = data
+
+                    # save into database
+                    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    self.cur.execute(
+                        "INSERT INTO readings VALUES (?, ?, ?, ?)",
+                        (ts, data["moisture"], data["temperature"], data["humidity"])
+                    )
+                    self.conn.commit()
+
+            except Exception as e:
+                print("Serial error:", e)
 
     # ---------------- History ----------------
     def show_history(self):
