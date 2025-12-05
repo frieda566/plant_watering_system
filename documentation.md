@@ -119,7 +119,12 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
 - ![time](time.jpg)
 - Therefore, we decided to go to Baumarkt and to build something by hand however this it how the container was supposed to look like:
 - ![3D-Front](3d-print1.png), ![3D-Side](3d-print2.png)
-- 
+
+### 05.12.2025
+- Frieda changed the show_graphs to use plant_data.json to check if actual data can be printed 
+- we aren't sure jet if we should keep it this way or try out more with matbpilot?
+- additionally we are thinking about adding a graph were all these components come together or where you get info what your graphs say about your plant health (maybe by comparing it with data from lexicon?)
+- moreover, Frieda added a "necessary_libraries" as this was something that could have been improved in our project from last semester - so that the person knows which libraries are necessary for this project to work
 
 
 
