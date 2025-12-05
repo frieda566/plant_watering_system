@@ -1,11 +1,14 @@
+# pip install serial
 import tkinter as tk
 from tkinter import ttk, font
 import sqlite3, threading, queue, pandas as pd
 import json
 import os
-import pyserial
+import serial
 import serial.tools.list_ports
 from datetime import datetime
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import matplotlib.pyplot as plt
 
 class PlantMonitoringApp:
     def __init__(self, root):
@@ -15,6 +18,7 @@ class PlantMonitoringApp:
         self.root.configure(bg=self._original_bg)
         self.root.geometry("900x700")
         self.root.minsize(800, 600)
+        self.latest_data = {"moisture": None, "temperature": None, "humidity": None}
 
         # ---------- Colors ----------
         self.colors = {
@@ -161,7 +165,7 @@ class PlantMonitoringApp:
             with open(self.history_file, "r") as f:
                 data = json.load(f)
             # reverse to show newest first
-            data.sort(key=lambda x: x["timestamp"], reverse=True)
+            data.sort(key=lambda x: x["timestamp"])
             return data
         return []
 
@@ -210,8 +214,7 @@ class PlantMonitoringApp:
                 if not line:
                     continue
 
-                # Arduino should send something like:
-                # M:45,T:22,H:55
+                # Arduino sends: M:45,T:22,H:55
                 parts = line.split(",")
                 data = {}
 
@@ -226,13 +229,17 @@ class PlantMonitoringApp:
                 if len(data) == 3:
                     self.latest_data = data
 
-                    # save into database
                     ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     self.cur.execute(
                         "INSERT INTO readings VALUES (?, ?, ?, ?)",
                         (ts, data["moisture"], data["temperature"], data["humidity"])
                     )
                     self.conn.commit()
+
+            except serial.SerialException:
+                print("Lost connection to Arduino!")
+                self.serial_running = False
+                break
 
             except Exception as e:
                 print("Serial error:", e)
@@ -271,16 +278,93 @@ class PlantMonitoringApp:
 
     # ---------------- Graphs ----------------
     def show_graphs(self):
+        import matplotlib.pyplot as plt
+        from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
         self.clear_window()
+
         frame = tk.Frame(self.root, bg=self.colors["cream"])
         frame.pack(fill="both", expand=True, padx=20, pady=20)
 
-        tk.Label(frame, text="📈 Graphs", font=("Helvetica", 20, "bold"),
-                 bg=self.colors["cream"], fg=self.colors["dark_green"]).pack(pady=10)
+        tk.Label(
+            frame, text="📈 Graphs",
+            font=("Helvetica", 20, "bold"),
+            bg=self.colors["cream"], fg=self.colors["dark_green"]
+        ).pack(pady=10)
 
-        # placeholder: can embed matplotlib graph here
-        tk.Label(frame, text="Graphs would appear here", bg=self.colors["cream"]).pack(pady=50)
+        style = ttk.Style()
+        style.theme_use("clam")
 
+        style.configure(
+            "CustomNotebook.TNotebook",
+            background=self.colors["cream"],
+            borderwidth=0
+        )
+
+        style.configure(
+            "CustomNotebook.TNotebook.Tab",
+            background=self.colors["sage"],
+            foreground=self.colors["dark_green"],
+            padding=[10, 5]
+        )
+
+        style.map(
+            "CustomNotebook.TNotebook.Tab",
+            background=[("selected", self.colors["lime"])],
+            foreground=[("selected", self.colors["dark_green"])]
+        )
+
+        # ---- Load History Data ----
+        history = self.load_history()
+        if not history:
+            tk.Label(frame, text="No data available yet!",
+                     bg=self.colors["cream"], fg=self.colors["dark_green"],
+                     font=("Helvetica", 14)).pack()
+            self.back_to_menu_button(frame)
+            return
+
+        # Extract values
+        timestamps = [item["timestamp"] for item in history]
+        moisture = [item["moisture"] for item in history]
+        temperature = [item["temperature"] for item in history]
+        humidity = [item["humidity"] for item in history]
+
+        # ---------- Notebook (Tabs) ----------
+        notebook = ttk.Notebook(frame, style="CustomNotebook.TNotebook")
+        notebook.pack(fill="both", expand=True)
+
+        # Create three tabs
+        tab1 = tk.Frame(notebook, bg=self.colors["cream"])
+        tab2 = tk.Frame(notebook, bg=self.colors["cream"])
+        tab3 = tk.Frame(notebook, bg=self.colors["cream"])
+
+        notebook.add(tab1, text="Moisture")
+        notebook.add(tab2, text="Temperature")
+        notebook.add(tab3, text="Humidity")
+
+        # ----- Helper function to draw graph -----
+        def draw_graph(tab, y_values, ylabel, title):
+            fig = plt.Figure(figsize=(7, 4), dpi=100)
+            ax = fig.add_subplot(111)
+
+            ax.plot(timestamps, y_values, marker="o", linewidth=2, color=self.colors["dark_green"])
+            ax.set_title(title, fontsize=14)
+            ax.set_ylabel(ylabel, fontsize=12)
+            ax.set_xlabel("\n Time", fontsize=14, color=self.colors["dark_green"])
+            ax.tick_params(axis="x", rotation=45)
+
+            fig.tight_layout()
+
+            canvas = FigureCanvasTkAgg(fig, master=tab)
+            canvas.draw()
+            canvas.get_tk_widget().pack(fill="both", expand=True, pady=10)
+
+        # Draw each graph
+        draw_graph(tab1, moisture, "Moisture (%)", "Moisture Over Time")
+        draw_graph(tab2, temperature, "Temperature (°C)", "Temperature Over Time")
+        draw_graph(tab3, humidity, "Humidity (%)", "Humidity Over Time")
+
+        # Back button
         self.back_to_menu_button(frame)
 
     # ---------------- Lexicon ----------------
