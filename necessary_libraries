@@ -1,0 +1,4 @@
+Paste the following segment into your Python Terminal to ensure our code will work within your environment: 
+
+pip install tkinter 
+pip install ... 
