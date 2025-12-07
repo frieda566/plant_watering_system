@@ -126,6 +126,6 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
 - additionally we are thinking about adding a graph were all these components come together or where you get info what your graphs say about your plant health (maybe by comparing it with data from lexicon?)
 - moreover, Frieda added a "necessary_libraries" as this was something that could have been improved in our project from last semester - so that the person knows which libraries are necessary for this project to work
 
-
-
+### 7.12.2025
+- Paula added the 
 
