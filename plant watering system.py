@@ -59,6 +59,7 @@ class PlantMonitoringApp:
                 self.serial_port = p.device
                 break
 
+        # self.serial_port = '/dev/cu.usbmodem1101'
         if self.serial_port is None:
             print("⚠ No Arduino detected. Running without live data.")
         else:
@@ -438,11 +439,31 @@ class PlantMonitoringApp:
             name_label.pack(side="left", fill="x", expand=True, padx=(0, 10))
 
             # Details button with fixed width
-            details_btn = tk.Button(inner, text="Details", font=("Helvetica", 12, "bold"),
-                                    bg=self.colors["lime"], fg=self.colors["dark_green"],
-                                    width=10, relief="flat", bd=0, cursor="hand2",
+            # Remove the old details_btn code and replace with:
+
+            # Create outer brown border frame
+            outer_btn = tk.Frame(inner, bg=self.colors["brown"])
+            outer_btn.pack(side="right", padx=10)
+
+            # Create inner lime frame
+            inner_btn = tk.Frame(outer_btn, bg=self.colors["lime"])
+            inner_btn.pack(padx=3, pady=3)
+
+            # Create button
+            details_btn = tk.Button(inner_btn, text="Details",
+                                    font=("Helvetica", 12, "bold"),
+                                    bg=self.colors["lime"],
+                                    fg=self.colors["dark_green"],
+                                    relief="flat", bd=0, padx=15, pady=8,
+                                    cursor="hand2",
                                     command=lambda r=row: self.show_lexicon_popup(r))
-            details_btn.pack(side="right", padx=10)
+            details_btn.pack()
+
+            # Hover effects
+            details_btn.bind("<Enter>", lambda e, btn=details_btn, frame=inner_btn:
+            (btn.config(bg=self.colors["sage"]), frame.config(bg=self.colors["sage"])))
+            details_btn.bind("<Leave>", lambda e, btn=details_btn, frame=inner_btn:
+            (btn.config(bg=self.colors["lime"]), frame.config(bg=self.colors["lime"])))
 
             # Hover effect for button
             details_btn.bind("<Enter>", lambda e, btn=details_btn: btn.config(bg=self.colors["sage"]))
