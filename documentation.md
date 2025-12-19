@@ -138,3 +138,8 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
   - Caliberation button??? 
   - Categorizing plants – more tropical and then having the watering accordingly 
   - Don’t recommend using battery – especially with LCDisplay
+
+### 19.12.2025
+- Today Frieda looked into the possibilities of letting the user get a health report based on inserting the actual plant and the program then comparing the data of the daily readings with those of the lexicon
+- the problem is that the lexicon currently has more written words for the points that would be important - obvioulsy Python would simple need numbers or a range of numbers to detect the health of the plant based on knowing whats a good range and what is out of that range 
+- we are thinking about either changing the lexicon or creating a further file which runs in the back based solely on numbers for the ideal humidity and temperature of the plant 
