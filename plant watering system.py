@@ -1,4 +1,3 @@
-# pip install serial
 import tkinter as tk
 from tkinter import ttk, font
 import sqlite3, threading, queue, pandas as pd
@@ -7,8 +6,7 @@ import os
 import serial
 import serial.tools.list_ports
 from datetime import datetime
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import matplotlib.pyplot as plt
+
 
 class PlantMonitoringApp:
     def __init__(self, root):
@@ -102,6 +100,7 @@ class PlantMonitoringApp:
         self.create_styled_button(button_frame, "📜 History", self.show_history)
         self.create_styled_button(button_frame, "📈 Graphs", self.show_graphs)
         self.create_styled_button(button_frame, "🌿 Lexicon", self.show_lexicon)
+        self.create_styled_button(button_frame, "🌱 My Plant", self.show_plant_health)
         self.create_styled_button(button_frame, "❌ Exit", self.root.quit)
 
     # ---------------- Styled Button ----------------
@@ -525,6 +524,112 @@ class PlantMonitoringApp:
 
         # Close button
         self.create_styled_button(scroll_frame, "✓ Close", popup.destroy)
+
+    def show_plant_health(self):
+        self.clear_window()
+
+        frame = tk.Frame(self.root, bg=self.colors["cream"])
+        frame.pack(fill="both", expand=True, padx=20, pady=20)
+
+        tk.Label(
+            frame, text="🌱 Weekly Plant Health",
+            font=("Helvetica", 20, "bold"),
+            bg=self.colors["cream"], fg=self.colors["dark_green"]
+        ).pack(pady=10)
+
+        tk.Label(
+            frame, text="Select your plant:",
+            bg=self.colors["cream"], fg=self.colors["dark_green"],
+            font=("Helvetica", 14)
+        ).pack(pady=5)
+
+        plant_var = tk.StringVar()
+        plant_names = self.lexicon_df["Plant Name"].tolist()
+
+        dropdown = ttk.Combobox(
+            frame, textvariable=plant_var,
+            values=plant_names, state="readonly", width=30
+        )
+        dropdown.pack(pady=10)
+
+        self.create_styled_button(
+            frame,
+            "Generate Health Report",
+            lambda: self.generate_health_report(plant_var.get(), frame)
+        )
+
+        self.back_to_menu_button(frame)
+
+    def get_last_week_data(self):
+        history = self.load_history()
+        return history[-7:] if len(history) >= 7 else history
+
+    def get_optimal_ranges(self, plant_row):
+        # You can refine this later
+        return {
+            "temperature": (18, 24),
+            "humidity": (50, 60),
+            "moisture": (40, 70)
+        }
+
+    def analyze_week(self, week_data, optimal):
+        avg_temp = sum(d["temperature"] for d in week_data) / len(week_data)
+        avg_hum = sum(d["humidity"] for d in week_data) / len(week_data)
+        avg_moist = sum(d["moisture"] for d in week_data) / len(week_data)
+
+        feedback = []
+
+        if optimal["temperature"][0] <= avg_temp <= optimal["temperature"][1]:
+            feedback.append("✔ Temperature is in the optimal range.")
+        else:
+            feedback.append("⚠ Temperature should be adjusted.")
+
+        if optimal["humidity"][0] <= avg_hum <= optimal["humidity"][1]:
+            feedback.append("✔ Humidity level is healthy.")
+        else:
+            feedback.append("⚠ Humidity is outside the ideal range.")
+
+        if optimal["moisture"][0] <= avg_moist <= optimal["moisture"][1]:
+            feedback.append("✔ Soil moisture is suitable.")
+        else:
+            feedback.append("⚠ Soil moisture needs attention.")
+
+        return feedback
+
+    def generate_health_report(self, plant_name, parent):
+        if not plant_name:
+            return
+
+        plant_row = self.lexicon_df[self.lexicon_df["Plant Name"] == plant_name].iloc[0]
+        optimal = self.get_optimal_ranges(plant_row)
+        week_data = self.get_last_week_data()
+
+        if not week_data:
+            tk.Label(
+                parent, text="No weekly data available yet.",
+                bg=self.colors["cream"], fg=self.colors["dark_green"]
+            ).pack()
+            return
+
+        feedback = self.analyze_week(week_data, optimal)
+
+        report_frame = tk.Frame(parent, bg=self.colors["sage"], padx=15, pady=15)
+        report_frame.pack(fill="x", pady=20)
+
+        tk.Label(
+            report_frame,
+            text=f"Weekly Health Report for {plant_name}",
+            font=("Helvetica", 16, "bold"),
+            bg=self.colors["sage"], fg=self.colors["dark_green"]
+        ).pack(pady=5)
+
+        for line in feedback:
+            tk.Label(
+                report_frame,
+                text=line,
+                bg=self.colors["sage"], fg=self.colors["dark_green"],
+                font=("Helvetica", 12), anchor="w"
+            ).pack(fill="x")
 
     # ---------------- Utility ----------------
     def clear_window(self):
