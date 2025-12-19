@@ -126,6 +126,15 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
 - additionally we are thinking about adding a graph were all these components come together or where you get info what your graphs say about your plant health (maybe by comparing it with data from lexicon?)
 - moreover, Frieda added a "necessary_libraries" as this was something that could have been improved in our project from last semester - so that the person knows which libraries are necessary for this project to work
 
-### 7.12.2025
+### 07.12.2025
 - Paula added the 
 
+### 16.12.2025
+- Today we had our presentation to pitch our current project idea and what we have so far 
+- these were the bullet points we gathered after getting a review & tips: 
+  - Shouldn’t add more just iteration 
+  - Making everything stable 
+  - Probably problems with the wires – adjust 
+  - Caliberation button??? 
+  - Categorizing plants – more tropical and then having the watering accordingly 
+  - Don’t recommend using battery – especially with LCDisplay
