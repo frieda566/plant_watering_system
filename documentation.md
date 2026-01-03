@@ -117,7 +117,6 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
 ### 1.12.2025
 - tried to 3D print our model in the Digi Lab however we decided against it after we saw the printing time
 - ![time](time.jpg)
-- Therefore, we decided to go to Baumarkt and to build something by hand however this it how the container was supposed to look like:
 - ![3D-Front](3d-print1.png), ![3D-Side](3d-print2.png)
 
 ### 05.12.2025
@@ -127,7 +126,13 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
 - moreover, Frieda added a "necessary_libraries" as this was something that could have been improved in our project from last semester - so that the person knows which libraries are necessary for this project to work
 
 ### 07.12.2025
-- Paula added the 
+- We firstly thought we weren't able to print the 3d container however Paulas friend who studies at TUHH offered Paula to use their §D Printing facilities.
+- Together with the friend, who had more experience than Paula in 3D printing, helped her to optimize her model.
+- costs and effort were saved, and we printed it with a filament thickness of 5%.
+
+### 14.12.2025 
+- becuase the walls of the 3d container were a bit too thin, Paula decided to fill the inside of the water container with epoxy resin to make it waterproof. 
+- 
 
 ### 16.12.2025
 - Today we had our presentation to pitch our current project idea and what we have so far 
