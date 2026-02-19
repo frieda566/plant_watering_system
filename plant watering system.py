@@ -5,7 +5,7 @@ import json
 import os
 import serial
 import serial.tools.list_ports
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class PlantMonitoringApp:
@@ -17,6 +17,15 @@ class PlantMonitoringApp:
         self.root.geometry("900x700")
         self.root.minsize(800, 600)
         self.latest_data = {"moisture": None, "temperature": None, "humidity": None}
+        # ---------- Load Plant Health Ranges ----------
+        self.health_df = pd.read_csv(
+            "plant_health_ranges.csv",
+            sep=';',
+            skip_blank_lines=True,
+            on_bad_lines='skip'
+        )
+        self.health_df.columns = [c.strip() for c in self.health_df.columns]
+        self.health_df["Plant Name"] = self.health_df["Plant Name"].str.strip()
 
         # ---------- Colors ----------
         self.colors = {
@@ -562,14 +571,30 @@ class PlantMonitoringApp:
 
     def get_last_week_data(self):
         history = self.load_history()
-        return history[-7:] if len(history) >= 7 else history
+        now = datetime.now()
+        week_ago = now - timedelta(days=7)
 
-    def get_optimal_ranges(self, plant_row):
-        # You can refine this later
+        # Only include entries in the last 7 days and ignore zeros
+        week_data = [
+            d for d in history
+            if datetime.strptime(d["timestamp"], "%Y-%m-%d %H:%M:%S") >= week_ago
+               and d["temperature"] > 0 and d["humidity"] > 0
+               and d["moisture"] > 0
+        ]
+        return week_data
+
+    def get_optimal_ranges(self, plant_name):
+        row = self.health_df[self.health_df["Plant Name"] == plant_name]
+
+        if row.empty:
+            return None  # plant not found
+
+        row = row.iloc[0]
+
         return {
-            "temperature": (18, 24),
-            "humidity": (50, 60),
-            "moisture": (40, 70)
+            "temperature": (row["Temperature Min"], row["Temperature Max"]),
+            "humidity": (row["Humidity Min"], row["Humidity Max"]),
+            "moisture": (30, 70)  # default (not in table yet)
         }
 
     def analyze_week(self, week_data, optimal):
@@ -577,32 +602,28 @@ class PlantMonitoringApp:
         avg_hum = sum(d["humidity"] for d in week_data) / len(week_data)
         avg_moist = sum(d["moisture"] for d in week_data) / len(week_data)
 
-        feedback = []
-
-        if optimal["temperature"][0] <= avg_temp <= optimal["temperature"][1]:
-            feedback.append("✔ Temperature is in the optimal range.")
-        else:
-            feedback.append("⚠ Temperature should be adjusted.")
-
-        if optimal["humidity"][0] <= avg_hum <= optimal["humidity"][1]:
-            feedback.append("✔ Humidity level is healthy.")
-        else:
-            feedback.append("⚠ Humidity is outside the ideal range.")
-
-        if optimal["moisture"][0] <= avg_moist <= optimal["moisture"][1]:
-            feedback.append("✔ Soil moisture is suitable.")
-        else:
-            feedback.append("⚠ Soil moisture needs attention.")
-
-        return feedback
+        return [
+            f"🌡 Temperature ({avg_temp:.1f}°C): {self.compare_value(avg_temp, *optimal['temperature'])}",
+            f"💧 Humidity ({avg_hum:.1f}%): {self.compare_value(avg_hum, *optimal['humidity'])}",
+            f"🌱 Soil Moisture ({avg_moist:.1f}%): {self.compare_value(avg_moist, *optimal['moisture'])}"
+        ]
 
     def generate_health_report(self, plant_name, parent):
         if not plant_name:
             return
 
         plant_row = self.lexicon_df[self.lexicon_df["Plant Name"] == plant_name].iloc[0]
-        optimal = self.get_optimal_ranges(plant_row)
+        optimal = self.get_optimal_ranges(plant_name)
         week_data = self.get_last_week_data()
+
+        if not optimal:
+            tk.Label(
+                parent,
+                text="No health reference data available for this plant.",
+                bg=self.colors["cream"],
+                fg=self.colors["dark_green"]
+            ).pack()
+            return
 
         if not week_data:
             tk.Label(
@@ -630,6 +651,13 @@ class PlantMonitoringApp:
                 bg=self.colors["sage"], fg=self.colors["dark_green"],
                 font=("Helvetica", 12), anchor="w"
             ).pack(fill="x")
+
+    def compare_value(self, value, min_val, max_val):
+        if value < min_val:
+            return "⚠ Too low"
+        elif value > max_val:
+            return "⚠ Too high"
+        return "✔ Optimal"
 
     # ---------------- Utility ----------------
     def clear_window(self):
