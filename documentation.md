@@ -148,3 +148,9 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
 - Today Frieda looked into the possibilities of letting the user get a health report based on inserting the actual plant and the program then comparing the data of the daily readings with those of the lexicon
 - the problem is that the lexicon currently has more written words for the points that would be important - obvioulsy Python would simple need numbers or a range of numbers to detect the health of the plant based on knowing whats a good range and what is out of that range 
 - we are thinking about either changing the lexicon or creating a further file which runs in the back based solely on numbers for the ideal humidity and temperature of the plant 
+
+### 19.02.2026
+- After conducting a further csv file with only the max and min of humidity and temperature (for creating the health report comparison based on the weekly data)
+- I then inserted this csv file into here and then had to attempt a few tries until finally it worked - it seemed as though some of the weekly data didnt correspond to the initial idea I had for the comparison which meant I had to continously try new things and fix errors with Chat GPT 
+- now it generates a short health report and the data seems to match the one we have in the CSV file 
+- we could now further improve the interface of the health report and add further aspects 
