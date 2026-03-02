@@ -163,6 +163,7 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
 For debugging purposes, we pasted error messages of Arduino IDE or Python into ChatGPT to better understand their causes and explore possible solutions. 
 Additionally, we used AI to improve our documentation and refining the wording of explanations for clarity and precision. 
 When implementing the CSV files, especially the plant_health_ranges because it couldn't read the file properly due to too many ; and a different layout I asked ChatGPT what the solution would be. After manually changing the file accordingly, everything could be read correctly. 
+Additionally, we used AI in cases of design: For instance for the def show_history(self): we weren't sure how to change the colors of the headings and how to change the font from black to brown - so this is where i then inserted the code for the style.configure and added the table.tag_configure. I did the same for the def draw_graph(tab, y_values, ylabel, title): function to ensure that the graph would be according to the color scheme we had picked out. 
 
 ## Next steps and takeaways: 
 - obviously our plant lexicon isn't equipped with every plant so in further development processes we could further add more plants 
