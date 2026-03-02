@@ -1,4 +1,13 @@
-## plant_watering_system
+# Documentation 
+
+## Project Overview
+
+## sketches 
+
+## Hardware setup 
+
+## circuit diagram 
+
 ## Meetings 
 ### 16.11.2025
 https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-cloud-0dff1f
