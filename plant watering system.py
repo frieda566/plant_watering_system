@@ -189,19 +189,26 @@ class PlantMonitoringApp:
         frame.pack(fill="both", expand=True, padx=20, pady=20)
 
         tk.Label(frame, text="📊 Dashboard", font=("Helvetica", 20, "bold"),
-                 bg=self.colors["cream"], fg=self.colors["dark_green"]).pack(pady=10)
+                 bg=self.colors["cream"], fg=self.colors["dark_green"]).pack(pady=20)
+
+        # live data labels container (placed in exact center)
+        content = tk.Frame(frame, bg=self.colors["cream"])
+        content.place(relx=0.5, rely=0.5, anchor="center")
 
         # live data labels
         self.moisture_label = tk.Label(frame, text="Soil Moisture: --%",
-                                       font=("Helvetica", 16), bg=self.colors["cream"])
+                                       font=("Helvetica", 16, "bold"), bg=self.colors["cream"], fg=self.colors["brown"])
         self.temperature_label = tk.Label(frame, text="Temperature: --°C",
-                                          font=("Helvetica", 16), bg=self.colors["cream"])
+                                          font=("Helvetica", 16, "bold"), bg=self.colors["cream"], fg=self.colors["brown"])
         self.humidity_label = tk.Label(frame, text="Humidity: --%",
-                                       font=("Helvetica", 16), bg=self.colors["cream"])
+                                       font=("Helvetica", 16, "bold"), bg=self.colors["cream"], fg=self.colors["brown"])
         for lbl in (self.moisture_label, self.temperature_label, self.humidity_label):
-            lbl.pack(pady=5)
+            lbl.pack(pady=8)
 
-        self.back_to_menu_button(frame)
+        # Back button at bottom
+        back_frame = tk.Frame(frame, bg=self.colors["cream"])
+        back_frame.pack(side="bottom", pady=20)
+        self.back_to_menu_button(back_frame)
         self.update_dashboard()
 
     def update_dashboard(self):
@@ -262,6 +269,17 @@ class PlantMonitoringApp:
         tk.Label(frame, text="📜 History", font=("Helvetica", 20, "bold"),
                     bg=self.colors["cream"], fg=self.colors["dark_green"]).pack(pady=10)
 
+        style = ttk.Style()
+        style.theme_use("clam")  # ensure custom styles work
+
+        # Configure the Treeview headings
+        style.configure(
+            "Treeview.Heading",
+            font=("Helvetica", 12, "bold"),  # bold Helvetica
+            foreground=self.colors["dark_green"],  # text color
+            background=self.colors["sage"]  # optional background for header
+        )
+
         table = ttk.Treeview(frame, columns=("time", "moisture", "temp", "hum"), show="headings")
         table.heading("time", text="Timestamp")
         table.heading("moisture", text="Moisture (%)")
@@ -270,9 +288,12 @@ class PlantMonitoringApp:
         table.pack(fill="both", expand=True)
         self.history_table = table
 
+        # Define a tag for brown text
+        table.tag_configure("brown_text", foreground=self.colors["brown"])
+
         # populate table from JSON
         for row in self.load_history():
-            table.insert("", "end", values=(row["timestamp"], row["moisture"], row["temperature"], row["humidity"]))
+            table.insert("", "end", values=(row["timestamp"], row["moisture"], row["temperature"], row["humidity"]), tags=("brown_text",))
 
         self.back_to_menu_button(frame)
 
@@ -356,11 +377,23 @@ class PlantMonitoringApp:
             fig = plt.Figure(figsize=(7, 4), dpi=100)
             ax = fig.add_subplot(111)
 
-            ax.plot(timestamps, y_values, marker="o", linewidth=2, color=self.colors["dark_green"])
-            ax.set_title(title, fontsize=14)
-            ax.set_ylabel(ylabel, fontsize=12)
-            ax.set_xlabel("\n Time", fontsize=14, color=self.colors["dark_green"])
-            ax.tick_params(axis="x", rotation=45)
+            # plot line
+            ax.plot(timestamps, y_values, marker="o", linewidth=2, color=self.colors["sage"])
+
+            # title
+            ax.set_title(title, fontsize=14, color=self.colors["dark_green"], fontweight="bold")
+
+            # labels
+            ax.set_ylabel(ylabel, fontsize=12, color=self.colors["brown"])
+            ax.set_xlabel("Time", fontsize=12, color=self.colors["brown"])
+
+            # ticks
+            ax.tick_params(axis="x", rotation=45, colors=self.colors["brown"])
+            ax.tick_params(axis="y", colors=self.colors["brown"])
+
+            # frame / rectangle around the plot
+            for spine in ax.spines.values():
+                spine.set_color(self.colors["dark_green"])
 
             fig.tight_layout()
 
