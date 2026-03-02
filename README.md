@@ -5,6 +5,10 @@ This project combines an Arduino Uno with sensors and Python software to monitor
 The system measures soil moisture, temperature, and humidity, stores the data, and compares it to optimal ranges for each plant. 
 It can generate health reports and alert when conditions require attention, helping maintain healthy plants efficiently.
 
+### Hardware requirements 
+
+### Arduino IDE 
+
 ### File overview 
 - arduinoIDE_code - contains the Arduino code uploaded to the Arduino Uno, handling sensor readings (moisture, temperature, humidity) and sending data to the Python application
 - images - stores any images used in the Python GUI or documentation
