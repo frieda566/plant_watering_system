@@ -1,4 +1,5 @@
 ## plant_watering_system
+## Meetings 
 ### 16.11.2025
 https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-cloud-0dff1f
 -	To get understanding of what's necessary 
@@ -131,7 +132,7 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
 - costs and effort were saved, and we printed it with a filament thickness of 5%.
 
 ### 14.12.2025 
-- becuase the walls of the 3d container were a bit too thin, Paula decided to fill the inside of the water container with epoxy resin to make it waterproof. 
+- because the walls of the 3d container were a bit too thin, Paula decided to fill the inside of the water container with epoxy resin to make it waterproof. 
 - 
 
 ### 16.12.2025
@@ -140,7 +141,7 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
   - Shouldn’t add more just iteration 
   - Making everything stable 
   - Probably problems with the wires – adjust 
-  - Caliberation button??? 
+  - Calibration button??? 
   - Categorizing plants – more tropical and then having the watering accordingly 
   - Don’t recommend using battery – especially with LCDisplay
 
@@ -154,3 +155,20 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
 - I then inserted this csv file into here and then had to attempt a few tries until finally it worked - it seemed as though some of the weekly data didnt correspond to the initial idea I had for the comparison which meant I had to continously try new things and fix errors with Chat GPT 
 - now it generates a short health report and the data seems to match the one we have in the CSV file 
 - we could now further improve the interface of the health report and add further aspects 
+
+
+## sources/ references: 
+
+## AI usage: 
+For debugging purposes, we pasted error messages of Arduino IDE or Python into ChatGPT to better understand their causes and explore possible solutions. 
+Additionally, we used AI to improve our documentation and refining the wording of explanations for clarity and precision. 
+When implementing the CSV files, especially the plant_health_ranges because it couldn't read the file properly due to too many ; and a different layout I asked ChatGPT what the solution would be. After manually changing the file accordingly, everything could be read correctly. 
+
+## Next steps and takeaways: 
+- obviously our plant lexicon isn't equipped with every plant so in further development processes we could further add more plants 
+- our graphs could be even further improved and our interface could have even more specialties 
+
+- Generally speaking we found this class and the work on our project very interesting, because we were able to combine hardware components with two different software environments. 
+- We were also able to learn the basics of electronics, including wiring, understanding power supply issues and even soldering fragile cables to make components work reliably. 
+- Furthermore, working with real sensor data taught us that values are often inconsistent. Debugging wrong readings, unstable connections, or incorrect sensor placement became a big part of our process. 
+- Lastly, we learned how important documentation, testing and iteration are. Keeping track of what worked and what didn't helped us improve the system step by step. 
