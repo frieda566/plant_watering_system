@@ -3,6 +3,9 @@
 ## Project Overview
 
 ## sketches 
+![setup_09.12.2025](images/setup_09.12.2025.jpg)
+
+3D container: 
 
 ## Hardware setup 
 
@@ -126,8 +129,9 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
 - The most complicated thing was to get used to working in C++ with the Display and the Libray LiquidCrystal
 ### 1.12.2025
 - tried to 3D print our model in the Digi Lab however we decided against it after we saw the printing time
-- ![time](time.jpg)
-- ![3D-Front](3d-print1.png), ![3D-Side](3d-print2.png)
+- ![time](images/time.jpg)
+- ![3D-Front](images/3d-print1.jpg)
+- ![3D-Side](images/3d-print2.jpg)
 
 ### 05.12.2025
 - Frieda changed the show_graphs to use plant_data.json to check if actual data can be printed 
@@ -173,10 +177,13 @@ For debugging purposes, we pasted error messages of Arduino IDE or Python into C
 Additionally, we used AI to improve our documentation and refining the wording of explanations for clarity and precision. 
 When implementing the CSV files, especially the plant_health_ranges because it couldn't read the file properly due to too many ; and a different layout I asked ChatGPT what the solution would be. After manually changing the file accordingly, everything could be read correctly. 
 Additionally, we used AI in cases of design: For instance for the def show_history(self): we weren't sure how to change the colors of the headings and how to change the font from black to brown - so this is where i then inserted the code for the style.configure and added the table.tag_configure. I did the same for the def draw_graph(tab, y_values, ylabel, title): function to ensure that the graph would be according to the color scheme we had picked out. 
+Regarding Arduino IDE at the beginning we had troubles with the moisture, humdity and temperature reading - as our program showed the soil was dry - although it wasn't. We had to calibrate this accordingly and Chat GPT helped - we inserted the real numbers of wet, not wet and so on and then the numbers aligned. 
+
 
 ## Next steps and takeaways: 
 - obviously our plant lexicon isn't equipped with every plant so in further development processes we could further add more plants 
 - our graphs could be even further improved and our interface could have even more specialties 
+- in our case we used the battery provided by our Arduino kit, as we had already spent some amount of money on our project and although we have learned the battery isn't as reliable it worked in our case - yet for further or longer usage a different power source could be used. 
 
 - Generally speaking we found this class and the work on our project very interesting, because we were able to combine hardware components with two different software environments. 
 - We were also able to learn the basics of electronics, including wiring, understanding power supply issues and even soldering fragile cables to make components work reliably. 
