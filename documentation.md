@@ -3,178 +3,279 @@
 ## Project Overview
 
 ## sketches 
-![setup_09.12.2025](images/setup_09.12.2025.jpg)
+![setup_09.12.2025](images/setup_09.12.2025.JPG)
 
 3D container: 
+![3d-print1](images/3d-print1.jpg)
+![3d-print2](images/3d-print2.jpg)
 
 ## Hardware setup 
 
 ## circuit diagram 
 
 ## Meetings 
-### 16.11.2025
-https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-cloud-0dff1f
--	To get understanding of what's necessary 
--	First problem – relay doesn’t fit correctly in the breadboard 
-  -	Question: should we consider Arduino Cloud app for our project? 
-    - Depends – she knows very little 
-    - Python more reliable 
-  - How to connect water pump (thin cables) to relay and GND 
-    - screwable terminals 
-    - pay attention about pitch 
-    - solder – take some wire – digital lab soldering iron – solder wire to one side of this – to make a connection 
-  - Do we need a relay module – doesn’t fit breadboard 
-  - Moisture sensor – highest was 87% and lowest 56% - even though 
-  - Generally our circuit – is this correct with the power supply being external? 
-    - More stable if its on the breadboard 
-    - 9V battery not really good doesn’t hold that long 
-    - Can also try powering it through USB cable 
-        •	Plugged supply more reliable 
-        •	Make sure its 5V 
-        •	Or through the thing we use for battery – PLUG can then be changed manually on 
+### 16.11.2025 
+Before this meeting we had looked at similar project examples (https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-cloud-0dff1f) to gain a better understanding of what would be necessary for our own project.
+One of the first problems we encountered was that the relay did not fit properly into the breadboard. 
+
+Furthermore,  we encountered more problems and questions which is why we asked Qianxun Chen for guidance.
+We also asked whether it would make sense to use the Arduino Cloud app for our project. However, since we had very little experience with this tool, we were advised that using Python for the interface and communication could be a more reliable and manageable solution for us.
+Another important topic was how to connect the very thin cables of the water pump to the relay and the GND pin. 
+We learned that this could either be done using screwable terminals or by soldering additional wires to the pump cables to create a stable connection. 
+If soldering was used, we could attach a thicker wire to the thin cable using the soldering iron available in the Digital Lab. 
+When using screwable terminals, we were also told to pay attention to the pitch so that the components fit properly.
+
+We further discussed whether a relay module would be necessary, especially since the relay we had did not fit well on the breadboard. 
+While testing the soil moisture sensor, we also noticed that the measured values ranged only between about 56% and 87%, even though the actual soil conditions seemed to vary more significantly. 
+This helped us understand that sensor readings might require calibration or careful interpretation.
+
+Furthermore, we discussed whether our circuit was correct, particularly since we were using an external power supply. We concluded that the circuit would likely be more stable if powered through the breadboard. 
+Using a 9V battery was not ideal because it would not last very long. 
+Alternatively, the system could be powered through a USB cable, which would provide a more reliable power supply as long as it delivers 5V. 
+Another option would be using the battery plug we had, which could also be manually switched on when needed.
 
 ### 19.11.2025 
--	After being told we could either use screwable terminals or soldering to make the connection beweeen the thin wires and the 5V or GND pin possible to ensure that our pump would be able to run we decided to solder as the other products would have been expensive considering we only needed one or two screwable terminals 
--	Paula watched this video (https://www.youtube.com/watch?v=uj_PbRBirkQ) to get an idea of how to solder: 
--	In the next step she used a cutter knife to cut a wire in half and remove the isolation. The hardest part was to connect the two cables and twist the two wires together since both were fragile and very thin. However, once twisted together it was quite easy to solder them together with solder wire.
--	This was done with the minus and plus pole and once plugged in the pump finally worked and made noises  -> pumping the water of one bowl into the other one 
+After being advised that we could either use screwable terminals or soldering to connect the thin pump wires to the 5V and GND pins, we decided to solder the cables. 
+Purchasing screwable terminals would have been unnecessarily expensive considering we only needed one or two of them.
+
+To learn how to solder, Paula watched the following video tutorial https://www.youtube.com/watch?v=uj_PbRBirkQ. 
+Afterwards, she used a cutter knife to cut a wire in half and remove the insulation. The most difficult part was connecting the two very thin and fragile wires and twisting them together. 
+However, once they were properly twisted, soldering them together with solder wire was relatively easy.
+
+This process was repeated for both the minus and plus poles. 
+After connecting everything, the pump finally worked and started pumping water from one bowl into another.
 ![waterpump](images/waterpump.jpg)
--	Moreover, as we had problems with connecting the relay to the breadboard we consulted some further reading and realised that our only option would be to manually bend the “feet” of the relay or order a relay module which was prominent throughout multiple videos and project pitches that conducted similar projects 
--	In preperation for our idea to create a python user interface for our plant project Frieda watched the following video: https://www.youtube.com/watch?v=UeybhVFqoeg – and tried to follow the basic instructions to get an idea of what will be necessary and what we should consider when implementing our actual idea 
-    - Now know that for our project when using python its important to manually connect the port the Arduino is plugged in to Python to ensure that Python knows which port should be used – to know which port see Arduino IDE – Tools – port and copy dev name 
-	- Also in this case the person from the video used: # pip install pyserial to make it all work 
-	- For the actual turning on or off of the LED it was important to have a short code in the Arduino IDE that made the pins either high or low depending on the input – this way when I typed in ON in the Terminal on python it actually turned on the green led 
-	- Sadly the red pin and its commands didn’t work but for me in that moment it was enough to gain a better understanding of using Arduino IDE and Python together 
+
+Additionally, we continued investigating the issue with the relay not fitting into the breadboard. 
+After consulting further sources, we realized that our only options were either to manually bend the relay’s pins or to order a relay module, which was commonly used in similar projects shown in videos and tutorials.
+
+In preparation for building a Python user interface for the plant watering system, Frieda watched the following tutorial: https://www.youtube.com/watch?v=UeybhVFqoeg. 
+She followed the basic instructions to better understand how Python can communicate with Arduino. One important step was manually connecting the Arduino port in Python so that Python knows which port to use. 
+This port can be found in the Arduino IDE under Tools → Port, where the device name can be copied.
+The tutorial also required installing the pyserial library using pip install pyserial. 
+For controlling components such as LEDs, a short Arduino code was necessary that sets pins to HIGH or LOW depending on the input received from Python. This way, typing “ON” in the Python terminal successfully turned on the green LED. 
+The red LED commands did not work correctly, but the experiment was still useful for gaining a better understanding of how Arduino and Python interact.
 
 ### 21.11.2025 
--	sadly the relay module which we ordered didn’t arrive on time so today we tried the pump and the rest of the project without using the relay 
--	beforehand we tried bending the “legs” of the relay once again but it didn’t work 
--	we discussed potentially using the remote control or touch sensor 
--	additionally when looking up similar projects this idea catched our eye: https://projecthub.arduino.cc/lc_lab/automatic-watering-system-for-my-plants-e4c4b9 
--	we would also like to incorporate the monitor (5V 1602A Module), buzzer as well as the ultrasonic distance sensor
-    - the buzzer could play a melody when the soil is too dry and the distance sensor could come in handy to measure the water level of the cup the water is in
--   somehow the pump seemed to work when we inserted it into the breadboards side (+ and -) – then we realized that just putting the + cable of the pump into pin 3 -> Is only for signal but not for actually powering the pump 
--	pump in GND (- line which is connected to GND) and the + wire of the pump Is in the same line as the wire from pin 3 – which is the sensor for the pump? – for the pump to be turned on or off depending on the soil moisture 
--	then suddenly pump wasn’t strong enough – have to think of a better external power supply to ensure the pump has enough power 
--	other than that technically the setup worked – when the soil moisture sensor was dry water was pumped and when it was wet the pump stopped 
--	additionally the buzzer played Pirates of the Caribbean as soon as the soil moisture detected no moisture? Or less moisture? 
--	the Serial monitor showed: …. 
-- #### code we used in this case & for this specific setup see WORD 
--   We discussed that for our next meeting we would look up further additions for our setup and how to implement them – so that next time – when the relay module can be used and we have a solution for our external power source (can’t keep using the battery or the + and – of our breadboard) we can implement everything we have planed 
--	Additionally, we want to use Python for our user interface – so as soon as the “basics” of the physical part (Arduino…) are finalized we want to add the major part of the software part of our project 
+Unfortunately, the relay module we ordered had not arrived yet, so during this meeting we tested the pump and the rest of the setup without using the relay. Before doing so, we once again tried bending the relay’s pins to fit it into the breadboard, but this still did not work.
+We briefly discussed other possible interaction methods, such as using a remote control or a touch sensor. While researching similar projects, we also found the following example which inspired us: https://projecthub.arduino.cc/lc_lab/automatic-watering-system-for-my-plants-e4c4b9.
+
+Based on this idea, we considered adding additional components to our system, such as a 5V 1602A display module, a buzzer, and an ultrasonic distance sensor. The buzzer could play a melody when the soil becomes too dry, while the ultrasonic sensor could measure the water level in the container.
+During testing, the pump initially seemed to work when we inserted it into the breadboard’s side power rails. We then realized that connecting the pump’s positive cable to pin 3 alone would not power it, because that pin only provides a signal and not the actual power needed for the pump. 
+The correct setup was to connect the pump’s negative wire to the GND line and the positive wire to the same line as the wire from pin 3, which acted as the control signal.
+
+However, the pump later appeared too weak, which indicated that we needed a better external power supply to ensure it received enough power. Apart from that issue, the system worked technically: when the soil moisture sensor detected dry soil, the pump started pumping water, and when the soil was wet enough, the pump stopped.
+Additionally, the buzzer played the melody from Pirates of the Caribbean whenever the soil moisture sensor detected that the soil was too dry. The serial monitor also displayed sensor values and system information.
+For the next meeting, we decided to research additional features and how to implement them so that we could integrate everything once the relay module arrived and we found a reliable external power supply. 
+We also planned to focus more on the Python user interface once the physical Arduino setup was finalized.
 
 ### 22.11.2025 
-- Frieda thought about further additions for our setup: 
-  - Water Level Sensor: Detect if the reservoir is empty to prevent pump burnout
-    - As soon as the water level reaches below a certain number an LED on the board should turn on and a notification should be in the Python interface:
-      ![](images/water_distance_sensor_setup.jpg) (images/water_distance_sensor_setup.jpg)
-  - Variable Watering: Instead of just ON/OFF, calculate the amount of water needed based on soil dryness, plant type, and ambient temperature.
-    - Using temperature-humidity sensor?
-    - https://letplant.com/insights/indoor-houseplants/ - different plant types and their needs 
-    - add code so that instead of keeping the pump ON continuously, you can: 
-    •	run pump for 5 seconds or so 
-    •	pause 1 min 
-    •	recheck soil (to prevent flooding) 
-  - Trend Analysis:  to see how the plant’s environment changes.
-  - Animated LED Effects: Instead of just static colors, use patterns to show the plant’s “mood” (slow breathing effect = healthy, blinking = thirsty).
-  - screen
-  - meanwhile Paula occupied herself with a possible container for our project as we didn't want to have that many cables flying around - she started researching 3D printing and we thought about printing it in the Digi Lab 
+During this meeting, Frieda focused on brainstorming further additions to our setup. One idea was to implement a water level sensor that detects when the water reservoir is empty in order to prevent the pump from running dry and potentially burning out. 
+When the water level drops below a certain threshold, an LED on the board should turn on and a notification should appear in the Python interface.
+![](images/water_distance_sensor_setup.jpg) 
+
+Another idea was variable watering. Instead of simply switching the pump on or off, the system could calculate how much water the plant needs based on factors such as soil dryness, plant type, and ambient temperature. 
+For this purpose, we considered adding a temperature-humidity sensor. 
+We also researched plant requirements using resources such as https://letplant.com/insights/indoor-houseplants/. 
+
+To avoid flooding the plant, we discussed modifying the code so that the pump would run for a short time (for example 5 seconds), pause for one minute, and then recheck the soil moisture before watering again.
+We also considered implementing trend analysis, which would allow users to observe how environmental conditions change over time. 
+Another possible feature involved animated LED effects to display the plant’s “mood,” such as a slow breathing effect when the plant is healthy or blinking lights when it needs water. 
+We also wanted to incorporate a screen to display information directly on the device.
+
+Meanwhile, Paula started looking for a suitable container for the project because we wanted to avoid having too many exposed cables. 
+She began researching 3D printing options, and we considered printing a case in the Digital Lab.
 
 ### 24.11.2025
--	As we conducted this meeting in the KLIPPO we decided to not incorporate the buzzer 
--	Sadly, no new idea for the external power source 
--	Somehow the relay module made a weird clicking sound and a red LED went blinking for a short time when running the code 
--	Somehow the serial monitor created weird values when the soil monitor was put in water -> we have to fix the calculation so that the pump actually turns off when the soil moisture is enough -> realized that when putting the soil moisture sensor in wrong (not headfirst and straight) the values don’t make that much sense 
--   Added this logic into our code: 
-  - add code so that instead of keeping the pump ON continuously, you can: 
-    - run pump for 5 seconds or so 
-    - pause 1 min 
-    - recheck soil (to prevent flooding) 
--   in the next step we added the Ultrasonic sensor to measure the distance in our bowl of water additionally we added a blue LED on the breadboard which is supposed to blink when the water levels are too low 
-  - somehow the Serial monitor detected the correct things yet the blue LED didn’t follow this pattern 
-  - realized that it only updated the water level value every minute – had to create a code where the water level is being overlooked simultaneously 
-  - now it all worked accordingly 
--   tried to add the LED screen yet seemed pretty complicated as multiple wires are necessary and other sources seemed to use additional components to make the connection easier 
--	tried it out despite that – installed LiquidCrystal_I2C.h 
-  - it lit up a bit yet nothing else happened - we weren't sure if we had gotten the connections right - so we wrote that question down for the next time we had class 
+Since this meeting took place in the KLIPPO workspace, we decided not to include the buzzer in the final setup. 
+We still had not found a new solution for the external power supply. We thought about just keeping the current battery from our Arduino kit. 
+
+When testing the relay module, we noticed that it produced a clicking sound and that a red LED briefly blinked when running the code. 
+Additionally, the serial monitor sometimes showed strange values when the soil moisture sensor was placed in water. 
+We realized that the calculation in our code needed to be corrected so that the pump would actually stop when the soil moisture was sufficient. 
+
+We also discovered that incorrect sensor placement (not straight or not inserted properly) resulted in unreliable readings.
+We then implemented a watering logic where the pump runs for 5 seconds, pauses for one minute, and then checks the soil moisture again to prevent overwatering.
+
+Next, we added the ultrasonic distance sensor to measure the water level in the container and connected a blue LED that should blink when the water level becomes too low. 
+Initially, the serial monitor detected the correct values but the LED did not behave accordingly. 
+We realized that the water level was only being updated once per minute, so we modified the code to monitor the water level continuously. 
+After this change, the system worked as intended.
+
+We also attempted to add the LED screen, but the setup was complicated because many wires were required and some tutorials used additional components to simplify the connection. 
+Despite this, we tried installing the LiquidCrystal_I2C library and connecting the display. 
+The screen lit up slightly, but nothing else happened. Since we were unsure whether the wiring was correct, we wrote down the issue to ask about it in the next class.
+
 ![setup_24.11.2025_1](images/setup_24.11.2025_1.jpg)
 ![setup_24.11.2025_2](images/setup_24.11.2025_2.JPG)
 ![setup_24.11.2025_3](images/setup_24.11.2025_3.JPG)
 ![setup_24.11.2025_4](images/setup_24.11.2025_4.JPG)
 
 ### 28.11.2025 
-- we started by putting up the small LED to see if it works - we used the following tutorial: https://docs.arduino.cc/learn/electronics/lcd-displays/
-- the screen finally lit up and then we changed our Arduino IDE code to actually print something on the screen 
-- meanwhile Frieda tested out a possible code on Python to see if the interface worked and the code ran correctly with no problems - when combining Python with Arduino it is important to mention in your Python code which port your Arduino board is plugged into 
-- Furthermore, we brainstormed what further additions could be implemented 
-  - we thought about adding a tiny plant lexicon on our python interface so that users could look up typical plants and what further type of care is possible 
-  - moreover, we want to add a graph which basically represents how the plant the Arduino is "connected to" is doing 
-- currently our setup looked like this:
-![setup](images/setup_28.11.2025.jpg) 
-- LED screen worked and printed the temperature, soil moisture and humidity as well as if the pump is on yet the temperature, soil moisture and humidity didn't show any or non correct numbers 
-- we then found out that we hadn't connected the digital pin correctly to the sensor (https://projecthub.arduino.cc/rudraksh2008/temperature-and-humidity-sensor-with-arduino-1d52a6) - after that we got correct numbers 
-![LED_screen](images/LED_screen.jpg)
-- next we added our distance measure sensor and started to setup the whole setup with water and so on to test it out 
-- but the pump didn't work - we checked the cables but everything seemed to be wired correctly 
+We started this session by testing the LCD display using the following tutorial: https://docs.arduino.cc/learn/electronics/lcd-displays/. 
+After adjusting the wiring, the screen finally lit up and we modified our Arduino code so that it could actually display text.
+
+Meanwhile, Frieda tested a Python code prototype (which we generated with help from Chat GPT) to verify that the interface worked and that the communication with Arduino ran without problems. 
+When combining Python with Arduino, it is important to specify in the Python code which port the Arduino board is connected to.
+
+We also brainstormed additional features. One idea was to integrate a small plant lexicon into the Python interface so users could look up common houseplants and their care requirements. 
+Another idea was to display a graph showing how the plant connected to the Arduino system is doing over time.
+
+At that point, our setup included the LCD display, which showed temperature, soil moisture, humidity, and whether the pump was running. 
+However, the displayed sensor values were incorrect at first. After checking the wiring, we realized that the digital pin had not been connected properly to the sensor (https://projecthub.arduino.cc/rudraksh2008/temperature-and-humidity-sensor-with-arduino-1d52a6). 
+Once we corrected this connection, the display showed accurate values.
+
+Next, we added the ultrasonic distance sensor again and prepared the system with water to test the full setup. 
+Unfortunately, during this test the pump stopped working even though the cables appeared to be connected correctly.
+
+Currently, our setup looked like this:
+![setup_28.11.2025](images/setup_28.11.2025.JPG)
+
+![LED_screen](images/LED_screen.JPG)
 
 ### 30.11.2025 
-- today Frieda started to implement a plant dictionary 
-- for this she researched on the matter and found this pre defined excel sheet on reddit - https://docs.google.com/spreadsheets/d/1RArYadwipMGp9QFCYqbUTmwvCPyvwURWf7hIABg2n14/edit?gid=0#gid=0
-- she then proceeded to turn it into a csv to make it compatible with Python 
-- then she added it into the GUI and called it in the plant watering systems interface python code 
-- from there she got inspired by our previous code from Tech Basics I - scrollbar, buttons and so on 
-- additionally she changed the basic idea by adding a class and started to use tk and so on to ensure a nice and simple interface with matching colors 
-- sadly the lexicon interfaces' screen width and height doesn't match what it would actually need - we are searching for a solution for this problem 
+During this meeting, Frieda began implementing the plant lexicon feature. 
+She researched available datasets and found a predefined Excel sheet shared on Reddit - https://docs.google.com/spreadsheets/d/1RArYadwipMGp9QFCYqbUTmwvCPyvwURWf7hIABg2n14/edit?gid=0#gid=0. 
+She converted this sheet into a CSV file so that it could be processed more easily in Python.
 
-- Paula in the meantime completed the Arduino watering system. 
-- Added all the gadgets and made them work all together
-  - for the Code: During initialization, the program sets up hardware interfaces for the serial monitor, LCD display, sensors, and outputs, and displays a welcome message. In the main loop, the system continuously reads sensor values for soil moisture, temperature, humidity, and water tank level. If the DHT sensor fails, error handling routines display an error message and skip the watering cycle. The water tank level is checked via an ultrasonic sensor, activating an LED indicator if the water is low. Using the soil moisture reading, the system compares it against a preset threshold to decide when to run the pump. If watering occurs, the relay triggers the pump for 5 seconds and the system waits 30 seconds before proceeding. Throughout, real-time data and system status are shown on the LCD, and details of each cycle are logged to the serial output for debugging. Helper functions are used to convert the soil sensor’s raw values into percentages and to calculate water level distances from the ultrasonic sensor’s readings.
-- For this she used several sources (https://docs.arduino.cc/learn/electronics/lcd-displays/, https://projecthub.arduino.cc/lc_lab/automatic-watering-system-for-my-plants-e4c4b9, https://www.youtube.com/watch?v=w8Gyti0fwqI)
-- The most complicated thing was to get used to working in C++ with the Display and the Libray LiquidCrystal
-### 1.12.2025
-- tried to 3D print our model in the Digi Lab however we decided against it after we saw the printing time
+Afterwards, she integrated the data into the graphical user interface (GUI) of the plant watering system. 
+She reused concepts from previous coursework, such as scrollbars and buttons, and reorganized the code by introducing classes and using tkinter to create a simple and visually consistent interface. 
+However, the lexicon window currently has a problem where the screen width and height do not match the required content size, so we are still looking for a solution.
+
+At the same time, Paula completed the Arduino-based watering system. 
+She integrated all components so that they worked together. 
+During initialization, the program sets up the serial monitor, LCD display, sensors, and outputs, and displays a welcome message. 
+In the main loop, the system continuously reads data from the soil moisture sensor, the temperature and humidity sensor, and the ultrasonic sensor for the water tank level. 
+If the DHT sensor fails, the program displays an error message and skips the watering cycle.
+For this she used multiple sources: https://docs.arduino.cc/learn/electronics/lcd-displays/, https://projecthub.arduino.cc/lc_lab/automatic-watering-system-for-my-plants-e4c4b9, https://www.youtube.com/watch?v=w8Gyti0fwqI
+
+The water tank level is monitored by the ultrasonic sensor, which activates an LED if the water level becomes too low. 
+Based on the soil moisture value, the system compares the reading with a predefined threshold to decide whether watering is necessary. 
+If watering is required, the relay activates the pump for five seconds, after which the system waits thirty seconds before continuing. 
+All sensor data and system states are displayed on the LCD and logged to the serial monitor for debugging. 
+Helper functions convert raw sensor values into percentages and calculate water distances from the ultrasonic sensor readings.
+
+### 01.12.2025
+We attempted to 3D print a container for our project in the Digital Lab. 
+However, after seeing the estimated printing time, we decided not to proceed with printing the model there.
+In the meantime we started creating our intermediate presentation. 
 - ![time](images/time.jpg)
 - ![3D-Front](images/3d-print1.jpg)
 - ![3D-Side](images/3d-print2.jpg)
 
 ### 05.12.2025
-- Frieda changed the show_graphs to use plant_data.json to check if actual data can be printed 
-- we aren't sure jet if we should keep it this way or try out more with matbpilot?
-- additionally we are thinking about adding a graph were all these components come together or where you get info what your graphs say about your plant health (maybe by comparing it with data from lexicon?)
-- moreover, Frieda added a "necessary_libraries" as this was something that could have been improved in our project from last semester - so that the person knows which libraries are necessary for this project to work
+Frieda modified the show_graphs function so that it reads data from plant_data.json in order to test whether actual data can be displayed in graph form. 
+We are still unsure whether we will keep this approach or experiment further with Matplotlib.
+
+We also discussed adding a combined graph that summarizes several environmental factors and possibly provides interpretations of what the data indicates about plant health. 
+This could potentially be achieved by comparing the recorded data with the information from the plant lexicon.
+
+Additionally, Frieda added a “necessary_libraries” section to the project documentation so that users know which libraries must be installed for the program to run. 
+This was an improvement based on feedback from a previous project.
 
 ### 07.12.2025
-- We firstly thought we weren't able to print the 3d container however Paulas friend who studies at TUHH offered Paula to use their §D Printing facilities.
-- Together with the friend, who had more experience than Paula in 3D printing, helped her to optimize her model.
-- costs and effort were saved, and we printed it with a filament thickness of 5%.
+At first we believed we would not be able to print the 3D container. 
+However, Paula’s friend, who studies at TUHH, offered access to their 3D printing facilities. 
+With the friend’s experience in 3D printing, Paula was able to optimize her model. 
+As a result, the container could be printed more efficiently and with lower costs, using a filament thickness of 5%.
 
 ### 14.12.2025 
-- because the walls of the 3d container were a bit too thin, Paula decided to fill the inside of the water container with epoxy resin to make it waterproof. 
-- 
+Because the walls of the printed container were slightly too thin, Paula decided to fill the inside of the water container with epoxy resin to make it waterproof and more stable.
+Frieda continuously worked on the Python code and improved it before our presentation. 
 
 ### 16.12.2025
-- Today we had our presentation to pitch our current project idea and what we have so far 
-- these were the bullet points we gathered after getting a review & tips: 
-  - Shouldn’t add more just iteration 
-  - Making everything stable 
-  - Probably problems with the wires – adjust 
-  - Calibration button??? 
-  - Categorizing plants – more tropical and then having the watering accordingly 
-  - Don’t recommend using battery – especially with LCDisplay
+On this day we presented our project idea and current progress. After receiving feedback, we summarized several important points for improvement. 
+We were advised not to add too many new features but instead focus on iterating and stabilizing the existing system.
+
+We were also told to check potential wiring issues and improve the stability of the setup.
+Additionally, we discussed categorizing plants into groups, such as tropical plants, so that watering behavior could be adjusted accordingly.
+Yet, after proposing more ideas or asking for further input we were told that are project already combines a lot.
 
 ### 19.12.2025
-- Today Frieda looked into the possibilities of letting the user get a health report based on inserting the actual plant and the program then comparing the data of the daily readings with those of the lexicon
-- the problem is that the lexicon currently has more written words for the points that would be important - obvioulsy Python would simple need numbers or a range of numbers to detect the health of the plant based on knowing whats a good range and what is out of that range 
-- we are thinking about either changing the lexicon or creating a further file which runs in the back based solely on numbers for the ideal humidity and temperature of the plant 
+Frieda explored the possibility of generating a plant health report within the interface. 
+The idea was that users could select a plant, and the program would compare the plant’s weekly sensor data with the recommended environmental values stored in the lexicon.
+
+However, the lexicon currently contains mostly descriptive text, while Python would require numerical values or ranges to perform comparisons. 
+Therefore, we considered either modifying the lexicon itself or creating an additional file containing numerical ranges for ideal humidity and temperature values.
+
+We decided to create an Excel sheet which we will then turn into a CSV file containing only numbers, which makes it easier for Python to read and later to compare the values. 
+We divided the plants and each of us started researching optimal plant health.
 
 ### 19.02.2026
-- After conducting a further csv file with only the max and min of humidity and temperature (for creating the health report comparison based on the weekly data)
-- I then inserted this csv file into here and then had to attempt a few tries until finally it worked - it seemed as though some of the weekly data didnt correspond to the initial idea I had for the comparison which meant I had to continously try new things and fix errors with Chat GPT 
-- now it generates a short health report and the data seems to match the one we have in the CSV file 
-- we could now further improve the interface of the health report and add further aspects 
+After creating an additional CSV file containing the minimum and maximum values for humidity and temperature, Frieda used this data to implement the health report feature. 
+The CSV file was integrated into the Python program so that weekly sensor data could be compared with the recommended values.
 
+The implementation required several attempts because some of the recorded weekly data did not initially match the comparison logic. 
+After debugging and adjusting the code, the system finally generated a short health report that correctly corresponds to the values stored in the CSV file.
+
+In the future, we could further improve the interface and presentation of the health report and potentially add more aspects to make the feedback more detailed.
+
+### 02.03.2026
+Today, Frieda further updated the designs in plant watering system.py. 
+The interface still had some parts (for instance the graphs) that didn't align with the color scheme. 
 
 ## sources/ references: 
+sources see "Meetings"
+
+for plant_health_ranges.csv:
+https://houseplantsnook.com/ultimate-parlor-palm-care-guide#:~:text=Clean%20and%20consistent%20root%20environment,t%20a%20long%2Dterm%20fix.
+
+https://www.patchplants.com/pages/plant-care/complete-guide-to-parlour-palm-care/
+
+https://plnts.com/en/care/houseplants-family/aglaonema
+
+https://www.plantvine.com/2024/05/13/maranta-prayer-plant-care-guide/#:~:text=Maintaining%20the%20right%20temperature%20and,or%20using%20a%20room%20humidifier.
+
+https://plnts.com/en/care/houseplants-family/calathea
+
+https://soltech.com/blogs/blog/spider-plant-growing-guide#:~:text=Temperature%20and%20Humidity&text=Ideally%2C%20they%20prosper%20in%20average,lush%20growth%20and%20vibrant%20foliage.
+
+https://soltech.com/products/stromanthe-triostar-care#:~:text=raise%20humidity%20levels.-,Temperature,Fahrenheit%20(15%20degrees%20Celsius).
+
+https://soltech.com/products/snake-plant-care#:~:text=Temperature,any%20potential%20temperature%2Drelated%20stress.
+
+https://mygreenscape.ca/pages/dracaena-plant-care#:~:text=Dracaena%20plants%20thrive%20in%20temperatures,drafts%20and%20sudden%20temperature%20changes.
+
+https://plnts.com/en/care/houseplants-family/zamioculcas
+
+https://plnts.com/en/care/houseplants-family/peperomia
+
+https://soltech.com/products/fiddle-leaf-fig-care#:~:text=Temperature,addition%20to%20any%20indoor%20space.
+
+https://easyplant.com/care/monstera-deliciosa
+
+https://plnts.com/en/care/houseplants-family/fittonia
+
+https://www.thesill.com/blogs/plants-101/how-to-care-for-golden-pothos-epipremnum-aureum
+
+https://www.rootskcmo.com/product/rhoeo-tricolor/1390#
+
+https://growhub.ae/blogs/blog/humidity-hacks-how-to-keep-your-peace-lily-thriving-in-dry-summer-air#:~:text=Ideal%20Humidity%20Range%20for%20Peace,so%20you%20can%20respond%20effectively.
+
+https://deepgreenpermaculture.com/2025/08/09/the-comprehensive-guide-to-caring-for-dumb-cane-dieffenbachia/#:~:text=Temperature%20and%20Humidity:%20Dieffenbachia%20prefers,especially%20in%20dry%20indoor%20climates.; https://www.almanac.com/plant/how-care-dieffenbachia-plants#:~:text=the%20fertilizer%20packaging.-,Humidity,pebble%20tray%20to%20raise%20humidity!
+
+https://www.bradyswest.com/philodendron#:~:text=Although%20the%20more%20humidity%20the%20better%2C%20a,of%2065%2D85%20degrees%20F%20(18%2D30%20degrees%20C).
+
+https://newnorthgreenhouses.ca/blogs/gardening-tips/lush-and-lovely-caring-for-boston-ferns-in-spring-and-summer#:~:text=Humidity%20and%20Temperature:%20Boston%20ferns,the%20risk%20of%20fungal%20infections.
+
+https://www.urbanplant.in/a/blog/post/how-to-grow-and-care-for-rubber-plants-at-home-the-ultimate-indoor-guide#:~:text=Ideal%20Range:,Humidity:%2040–60%25
+
+https://growtropicals.com/blogs/plant-care-a-z/pilea#:~:text=What%20temperature%20and%20humidity%20do,levels%20between%2040–60%25.&text=Avoid%20cold%20drafts%20(like%20near,to%20curl%20or%20drop%20prematurely.
+
+https://chaletboutique.com.au/blogs/plant-care/tradescantia-care-guide#:~:text=WHAT%20IS%20THE%20BEST%20HUMIDITY,which%20is%20average%20room%20humidity.
+
+https://www.thesill.com/blogs/plants-101/how-to-care-for-a-zebra-plant#:~:text=Humidity,to%20dry%20out%20or%20wilt.
+
+https://plantsome.ca/blogs/blog/how-to-care-for-alocasia-indoors#:~:text=Alocasia%20plants%20hail%20from%20tropical,Soil%20and%20Fertilization
+
+https://greg.app/string-of-pearls-indoor-care/#:~:text=String%20of%20Pearls%20thrive%20in%20low%20to%20moderate%20humidity%2C%20ideally,it%20remains%20healthy%20and%20vibrant.
+
+https://soltech.com/products/string-of-hearts-care
+
+https://www.thesill.com/blogs/plants-101/how-to-care-for-bird-of-paradise
+
+https://greg.app/hoya-sunrise-temperature/#:~:text=🌡%EF%B8%8F%20Home%20Sweet%20Home:%20Creating,coffee%20shop's%20reliable%20Wi%2DFi.
+
 
 ## AI usage: 
 For debugging purposes, we pasted error messages of Arduino IDE or Python into ChatGPT to better understand their causes and explore possible solutions. 
@@ -185,9 +286,9 @@ Regarding Arduino IDE at the beginning we had troubles with the moisture, humdit
 
 
 ## Next steps and takeaways: 
-- obviously our plant lexicon isn't equipped with every plant so in further development processes we could further add more plants 
-- our graphs could be even further improved and our interface could have even more specialties 
-- in our case we used the battery provided by our Arduino kit, as we had already spent some amount of money on our project and although we have learned the battery isn't as reliable it worked in our case - yet for further or longer usage a different power source could be used.
+- Since our plant lexicon does not currently include every possible plant, it could be expanded in future development stages by adding more plant species and their specific care requirements.
+- Additionally, the graphs used to visualize the plant data could be further improved, and the user interface could be extended with additional features and functionalities to enhance usability and provide more detailed insights.
+- In our project, we used the battery provided with the Arduino kit because we had already spent a certain amount of money on other components. Although we learned that a battery is generally not the most reliable long-term power source, it worked sufficiently for our setup. For longer-term or more stable usage, however, a different power supply could be implemented.
 
 - Generally speaking we found this class and the work on our project very interesting, because we were able to combine hardware components with two different software environments. 
 - We were also able to learn the basics of electronics, including wiring, understanding power supply issues and even soldering fragile cables to make components work reliably. 
