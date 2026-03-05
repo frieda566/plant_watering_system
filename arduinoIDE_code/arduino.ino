@@ -63,10 +63,16 @@ void setup() {
 
 // soil moisture to %
 int readSoilMoisturePercent() {
-  int raw = analogRead(SOIL_PIN);  // 0–1023
+  int raw = analogRead(SOIL_PIN);  // read raw sensor value
 
-  // Assumes: 0 (wet) -> 100%, 1023 (dry) -> 0%
-  int percent = map(raw, 1023, 0, 0, 100);
+// ---------- calibration ----------
+  int wetRaw = 320;   // fully in water
+  int dryRaw = 423;   // dry soil / air
+
+  // map raw value to 0–100% moisture
+  int percent = map(raw, dryRaw, wetRaw, 0, 100);
+
+  // clamp to 0–100%
   if (percent < 0)   percent = 0;
   if (percent > 100) percent = 100;
 
