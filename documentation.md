@@ -214,6 +214,13 @@ In the future, we could further improve the interface and presentation of the he
 Today, Frieda further updated the designs in plant watering system.py. 
 The interface still had some parts (for instance the graphs) that didn't align with the color scheme. 
 
+### 05.03.2026
+Today, Frieda once again put up the whole project to ensure it all still works accordingly. 
+Unfortunately there were a few small issues but these could be solved. First, there was an error message: Serial error: table readings has 5 columns but 4 values were supplied. 
+But there wasn't an exact location where this problem could be found. So she used ChatGPT and figured out that the plant_data.db had to be deleted and the code manually created a new one. 
+After that there were no similar errors detected. 
+Furthermore, she realised that the numbers we had once calibrated for wet and dry soil didn't work after all so after changing the Arduino IDE code accordingly everything worked. 
+
 ## sources/ references: 
 sources see "Meetings"
 
