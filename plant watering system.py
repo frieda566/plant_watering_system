@@ -99,7 +99,7 @@ class PlantMonitoringApp:
         # headline
         title_font = font.Font(family="Helvetica", size=24, weight="bold")
         tk.Label(main_frame, text="🌱 Plant Monitoring System",
-                 font=title_font, bg=self.colors["green_bg"], fg="white").pack(pady=(20,40))
+                 font=title_font, bg=self.colors["green_bg"], fg="white").pack(pady=(20, 40))
 
         # menu buttons
         button_frame = tk.Frame(main_frame, bg=self.colors["green_bg"])
@@ -128,7 +128,7 @@ class PlantMonitoringApp:
         btn.bind("<Leave>", lambda e: (btn.config(bg=self.colors["lime"]), inner.config(bg=self.colors["lime"])))
         return btn
 
-    #----------------- Styled Scrollbar ---------------
+    # ----------------- Styled Scrollbar ---------------
     # custom vertical scrollbar styled to palette
     def create_styled_scrollbar(self, parent):
         style = ttk.Style()
@@ -199,7 +199,8 @@ class PlantMonitoringApp:
         self.moisture_label = tk.Label(frame, text="Soil Moisture: --%",
                                        font=("Helvetica", 16, "bold"), bg=self.colors["cream"], fg=self.colors["brown"])
         self.temperature_label = tk.Label(frame, text="Temperature: --°C",
-                                          font=("Helvetica", 16, "bold"), bg=self.colors["cream"], fg=self.colors["brown"])
+                                          font=("Helvetica", 16, "bold"), bg=self.colors["cream"],
+                                          fg=self.colors["brown"])
         self.humidity_label = tk.Label(frame, text="Humidity: --%",
                                        font=("Helvetica", 16, "bold"), bg=self.colors["cream"], fg=self.colors["brown"])
         for lbl in (self.moisture_label, self.temperature_label, self.humidity_label):
@@ -267,7 +268,7 @@ class PlantMonitoringApp:
         frame.pack(fill="both", expand=True, padx=20, pady=20)
 
         tk.Label(frame, text="📜 History", font=("Helvetica", 20, "bold"),
-                    bg=self.colors["cream"], fg=self.colors["dark_green"]).pack(pady=10)
+                 bg=self.colors["cream"], fg=self.colors["dark_green"]).pack(pady=10)
 
         style = ttk.Style()
         style.theme_use("clam")  # ensure custom styles work
@@ -293,7 +294,8 @@ class PlantMonitoringApp:
 
         # populate table from JSON
         for row in self.load_history():
-            table.insert("", "end", values=(row["timestamp"], row["moisture"], row["temperature"], row["humidity"]), tags=("brown_text",))
+            table.insert("", "end", values=(row["timestamp"], row["moisture"], row["temperature"], row["humidity"]),
+                         tags=("brown_text",))
 
         self.back_to_menu_button(frame)
 
@@ -434,7 +436,6 @@ class PlantMonitoringApp:
                                 fg=self.colors["dark_green"], relief="flat", bd=5,
                                 insertbackground=self.colors["dark_green"])
         search_entry.pack(pady=5)
-
 
         # Scrollable container for plants
         self.scroll_container = tk.Frame(main_frame, bg=self.colors["cream"])
@@ -697,9 +698,9 @@ class PlantMonitoringApp:
         for widget in self.root.winfo_children():
             widget.destroy()
 
+
 # ---------------- Launch ----------------
 if __name__ == "__main__":
     root = tk.Tk()
     app = PlantMonitoringApp(root)
     root.mainloop()
-
