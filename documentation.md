@@ -97,6 +97,10 @@ https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-clo
 -   tried to add the LED screen yet seemed pretty complicated as multiple wires are necessary and other sources seemed to use additional components to make the connection easier 
 -	tried it out despite that – installed LiquidCrystal_I2C.h 
   - it lit up a bit yet nothing else happened - we weren't sure if we had gotten the connections right - so we wrote that question down for the next time we had class 
+![setup_24.11.2025_1](images/setup_24.11.2025_1.jpg)
+![setup_24.11.2025_2](images/setup_24.11.2025_2.JPG)
+![setup_24.11.2025_3](images/setup_24.11.2025_3.JPG)
+![setup_24.11.2025_4](images/setup_24.11.2025_4.JPG)
 
 ### 28.11.2025 
 - we started by putting up the small LED to see if it works - we used the following tutorial: https://docs.arduino.cc/learn/electronics/lcd-displays/
@@ -183,7 +187,7 @@ Regarding Arduino IDE at the beginning we had troubles with the moisture, humdit
 ## Next steps and takeaways: 
 - obviously our plant lexicon isn't equipped with every plant so in further development processes we could further add more plants 
 - our graphs could be even further improved and our interface could have even more specialties 
-- in our case we used the battery provided by our Arduino kit, as we had already spent some amount of money on our project and although we have learned the battery isn't as reliable it worked in our case - yet for further or longer usage a different power source could be used. 
+- in our case we used the battery provided by our Arduino kit, as we had already spent some amount of money on our project and although we have learned the battery isn't as reliable it worked in our case - yet for further or longer usage a different power source could be used.
 
 - Generally speaking we found this class and the work on our project very interesting, because we were able to combine hardware components with two different software environments. 
 - We were also able to learn the basics of electronics, including wiring, understanding power supply issues and even soldering fragile cables to make components work reliably. 
