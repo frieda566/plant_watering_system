@@ -221,6 +221,13 @@ But there wasn't an exact location where this problem could be found. So she use
 After that there were no similar errors detected. 
 Furthermore, she realised that the numbers we had once calibrated for wet and dry soil didn't work after all so after changing the Arduino IDE code accordingly everything worked. 
 
+### 06.03.2026
+Today, we realized that we hadn't yet incorporated the buzzer yet, because it was pretty loud when we worked with it. 
+So Frieda had to add it into our 3D-container and connect it accordingly. This was a bit difficult because there are so many wires in our box. 
+After a while she was able to insert it into the compartment which we had created for it. 
+Then she had to adjust the Arduino code once again yet this wasn't too difficult as we had once prepared a code which already had a part of the Pirates of the Caribbean music inserted.
+She went on and finalized all ideas for the final video. 
+
 ## division of our work: 
 Since this was a group project between two people, we divided the tasks between us. 
 Because Paula would leave earlier in the semester, we decided from the beginning that we needed to start working early on the project. 
