@@ -221,6 +221,34 @@ But there wasn't an exact location where this problem could be found. So she use
 After that there were no similar errors detected. 
 Furthermore, she realised that the numbers we had once calibrated for wet and dry soil didn't work after all so after changing the Arduino IDE code accordingly everything worked. 
 
+## division of our work: 
+Since this was a group project between two people, we divided the tasks between us. 
+Because Paula would leave earlier in the semester, we decided from the beginning that we needed to start working early on the project. 
+It was also clear that Frieda would likely have a slightly larger workload toward the end of the project. 
+After discussing this with Qianxun Chen, it was agreed that Frieda could complete the final project video independently.
+
+At the beginning of the project, our tasks often overlapped. 
+We met weekly to discuss our progress, update each other on what we had accomplished, and worked side by side on different parts of the project. 
+This collaboration proved to be very helpful, as someone who had been focusing on a different aspect of the project could often contribute useful ideas or suggestions.
+
+Both of us participated in the hardware assembly. 
+However, Paula mainly focused on the hardware components, their assembly and the soldering of parts, while Frieda supported where possible and contributed ideas for additional features that could be implemented.
+
+The Arduino code was written collaboratively during several of our meetings, as this part required close coordination between hardware and software.
+
+As the project progressed, Paula continued to focus more on the hardware and the Arduino Uno, while Frieda began developing the Python interface. 
+Since we already had some experience from a previous project, we decided to keep a similar color scheme because we found it suitable and familiar.
+
+Whenever problems occurred or new ideas emerged, Paula also contributed to the development of the Python interface. 
+While Frieda added additional features such as the plant lexicon and the data visualization graphs, Paula focused on researching and designing a suitable 3D-printed container.
+
+In addition, we both researched suitable plant health ranges for different plant species. 
+Frieda was responsible for implementing these ranges into the Python interface so that the system could compare the measured values with the recommended conditions.
+
+The documentation was written collaboratively at the end of each meeting. 
+Towards the end of the project, Frieda revised the documentation to improve readability and added further information. 
+In addition, she created and edited the final project video independently.
+
 ## sources/ references: 
 sources see "Meetings"
 
@@ -287,8 +315,8 @@ https://greg.app/hoya-sunrise-temperature/#:~:text=🌡%EF%B8%8F%20Home%20Sweet%
 ## AI usage: 
 For debugging purposes, we pasted error messages of Arduino IDE or Python into ChatGPT to better understand their causes and explore possible solutions. 
 Additionally, we used AI to improve our documentation and refining the wording of explanations for clarity and precision. 
-When implementing the CSV files, especially the plant_health_ranges because it couldn't read the file properly due to too many ; and a different layout I asked ChatGPT what the solution would be. After manually changing the file accordingly, everything could be read correctly. 
-Additionally, we used AI in cases of design: For instance for the def show_history(self): we weren't sure how to change the colors of the headings and how to change the font from black to brown - so this is where i then inserted the code for the style.configure and added the table.tag_configure. I did the same for the def draw_graph(tab, y_values, ylabel, title): function to ensure that the graph would be according to the color scheme we had picked out. 
+When implementing the CSV files, especially the plant_health_ranges because it couldn't read the file properly due to too many ; and a different layout we asked ChatGPT what the solution would be. After manually changing the file accordingly, everything could be read correctly. 
+Additionally, we used AI in cases of design: For instance for the def show_history(self): we weren't sure how to change the colors of the headings and how to change the font from black to brown - so this is where we then inserted the code for the style.configure and added the table.tag_configure. We did the same for the def draw_graph(tab, y_values, ylabel, title): function to ensure that the graph would be according to the color scheme we had picked out. 
 Regarding Arduino IDE at the beginning we had troubles with the moisture, humdity and temperature reading - as our program showed the soil was dry - although it wasn't. We had to calibrate this accordingly and Chat GPT helped - we inserted the real numbers of wet, not wet and so on and then the numbers aligned. 
 
 
