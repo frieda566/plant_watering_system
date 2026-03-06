@@ -14,6 +14,7 @@ const int LCD_D7 = 12;
 const int SOIL_PIN   = A0;  // Soil moisture sensor
 const int DHT_PIN    = 6;   // Temp & humidity sensor
 const int RELAY_PIN  = 5;   // Relay -> pump
+const int BUZZER_PIN = 13;  // Buzzer pin
 
 // Ultrasonic water level
 const int TRIG_PIN   = 2;
@@ -40,6 +41,31 @@ const int waterLowDistance = 10;
 const unsigned long pumpOnDuration   = 5000;  // 5 seconds
 const unsigned long waitAfterPump    = 30000; // 30 seconds
 
+// --------- Note Definitions ---------
+#define REST 0
+#define NOTE_E4 330
+#define NOTE_G4 392
+#define NOTE_A4 440
+#define NOTE_B4 494
+#define NOTE_C5 523
+#define NOTE_D5 587
+
+// --------- Melody (Pirates snippet) ---------
+int melody[] = {
+NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, REST,
+NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, REST,
+NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, REST,
+NOTE_A4, NOTE_G4, NOTE_A4, REST
+};
+
+int durations[] = {
+8, 8, 4, 8, 8,
+8, 8, 4, 8, 8,
+8, 8, 4, 8, 8,
+8, 8, 4, 8
+};
+
+
 void setup() {
   Serial.begin(9600);
 
@@ -53,6 +79,7 @@ void setup() {
   pinMode(SOIL_PIN, INPUT);
   pinMode(RELAY_PIN, OUTPUT);
   digitalWrite(RELAY_PIN, LOW);
+  digitalWrite(BUZZER_PIN, LOW);
 
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
@@ -98,7 +125,7 @@ long readWaterDistanceCm() {
   return distance;
 }
 
-// Pump cycle: run pump 5s, then 30s countdown
+// Pump cycle: run pump 5s, play melody, then 30s countdown
 void runPumpCycle() {
   // 5-seconds pump running
   lcd.clear();
@@ -108,8 +135,27 @@ void runPumpCycle() {
   lcd.print("Pump: 5s");
 
   digitalWrite(RELAY_PIN, HIGH);
-  delay(pumpOnDuration);
+
+  unsigned long startTime = millis();
+  int size = sizeof(melody)/sizeof(int);
+  while (millis() - startTime < pumpOnDuration) {
+    for (int i = 0; i < size; i++) {
+      int duration = 1000 / durations[i];
+      int freq = melody[i];
+      if (freq == REST) {
+        noTone(BUZZER_PIN);
+        delay(duration * 1.3);
+      } else {
+        tone(BUZZER_PIN, freq, duration);
+        delay(duration * 1.3);
+        noTone(BUZZER_PIN);
+      }
+      if (millis() - startTime >= pumpOnDuration) break;
+    }
+  }
+
   digitalWrite(RELAY_PIN, LOW);
+  noTone(BUZZER_PIN);
 
   //  30-seconds countdown
   for (int i = waitAfterPump / 1000; i > 0; i--) {
