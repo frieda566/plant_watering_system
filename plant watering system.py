@@ -66,7 +66,7 @@ class PlantMonitoringApp:
                 self.serial_port = p.device
                 break
 
-        self.serial_port = '/dev/cu.usbmodem11401'
+        self.serial_port = '/dev/cu.usbmodem11401' # insert the name of your port
         if self.serial_port is None:
             print("⚠ No Arduino detected. Running without live data.")
         else:
