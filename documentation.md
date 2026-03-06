@@ -225,6 +225,8 @@ Furthermore, she realised that the numbers we had once calibrated for wet and dr
 Today, we realized that we hadn't yet incorporated the buzzer yet, because it was pretty loud when we worked with it. 
 So Frieda had to add it into our 3D-container and connect it accordingly. This was a bit difficult because there are so many wires in our box. 
 After a while she was able to insert it into the compartment which we had created for it. 
+![buzzer_1](images/buzzer_1.JPG)
+![buzzer_2](images/buzzer_2.JPG)
 Then she had to adjust the Arduino code once again yet this wasn't too difficult as we had once prepared a code which already had a part of the Pirates of the Caribbean music inserted.
 She went on and finalized all ideas for the final video. 
 
