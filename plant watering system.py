@@ -618,7 +618,10 @@ class PlantMonitoringApp:
         return week_data
 
     def get_optimal_ranges(self, plant_name):
-        row = self.health_df[self.health_df["Plant Name"] == plant_name]
+        plant_name_clean = plant_name.strip().lower()
+        row = self.health_df[
+            self.health_df["Plant Name"].str.strip().str.lower() == plant_name_clean
+            ]
 
         if row.empty:
             return None  # plant not found
@@ -628,7 +631,7 @@ class PlantMonitoringApp:
         return {
             "temperature": (row["Temperature Min"], row["Temperature Max"]),
             "humidity": (row["Humidity Min"], row["Humidity Max"]),
-            "moisture": (30, 70)  # default (not in table yet)
+            "moisture": (30, 60)  # average ideal percentage of soil moisture level for houseplants
         }
 
     def analyze_week(self, week_data, optimal):
