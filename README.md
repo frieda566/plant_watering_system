@@ -5,19 +5,45 @@ This project combines an Arduino Uno with sensors and Python software to monitor
 The system measures soil moisture, temperature, and humidity, stores the data, and compares it to optimal ranges for each plant. 
 It can generate health reports and alert when conditions require attention, helping maintain healthy plants efficiently.
 
-### Hardware requirements 
+## File overview 
 
-### Arduino IDE 
+├── arduinoIDE_code -> contains Arduino code <p>
+├── images -> stores the images used for Python GUI or documentation <p>
+├── documentation -> contains the process of this project <p>
+├── README.md -> general project overview <p>
+├── plant watering system.py -> main Python application <p>
+├── plant_care_lexicon.csv -> contains plant-specific information<p>
+└── plant_health_ranges.csv -> reference table for optimum state for individual plants <p>
 
-### File overview 
-- arduinoIDE_code - contains the Arduino code uploaded to the Arduino Uno, handling sensor readings (moisture, temperature, humidity) and sending data to the Python application
-- images - stores any images used in the Python GUI or documentation
-- documentation - contains project-related ideas, development process, sources, possible further developments, ... 
-- README.md - provides a general project overview, instructions and setup guidance for users
-- LICENSE - 
-- necessary_libraries???
-- plant watering system.py - the main Python application; handles data collection, analysis, weekly health report generation, and GUI interactions
-- plant_care_lexicon.csv - contains plant-specific information such as care tips or classifications used by the Python app
-- plant_data.db - a SQLite database storing structured historical sensor data for plants
-- plant_health_ranges.csv - reference table with optimal temperature, humidity, and optionally moisture ranges for each plant
-- plant_history.json - stores the raw sensor readings over time, used for calculating weekly averages and generating health reports
+
+## Libraries
+
+This project uses both Arduino and Python libraries.
+
+### Arduino Libraries
+- `LiquidCrystal.h` – for controlling the LCD display
+- `DHT.h` – for reading temperature and humidity data from the DHT sensor
+
+### Python Libraries
+- `tkinter` – for the graphical user interface
+- `sqlite3` – for local database storage
+- `threading` – for running background tasks
+- `queue` – for thread communication
+- `pandas` – for handling and analyzing data
+- `json` – for reading and writing JSON data
+- `os` – for file and system operations
+- `serial` – for communication with Arduino over serial port
+- `serial.tools.list_ports` – for detecting available serial ports
+- `datetime` – for working with date and time data
+
+The following libraries are part of Python's standard library and require no installation:
+tkinter, sqlite3, threading, queue, json, os, datetime
+
+Paste the following segment into your Python Terminal to ensure our code will work within your environment: 
+```
+pip install pandas
+pip install pyserial
+```
+
+## Start the interface
+Run `plant_watering_system.py`
