@@ -1,6 +1,4 @@
-# Documentation 
-
-## Project Overview
+# Documentation
 
 ## sketches 
 ![setup_09.12.2025](images/setup_09.12.2025.JPG)
@@ -40,7 +38,7 @@ After being advised that we could either use screwable terminals or soldering to
 Purchasing screwable terminals would have been unnecessarily expensive considering we only needed one or two of them.
 
 To learn how to solder, Paula watched the following video tutorial https://www.youtube.com/watch?v=uj_PbRBirkQ. 
-Afterwards, she used a cutter knife to cut a wire in half and remove the insulation. The most difficult part was connecting the two very thin and fragile wires and twisting them together. 
+Afterward, she used a cutter knife to cut a wire in half and remove the insulation. The most difficult part was connecting the two very thin and fragile wires and twisting them together. 
 However, once they were properly twisted, soldering them together with solder wire was relatively easy.
 
 This process was repeated for both the minus and plus poles. 
@@ -175,7 +173,7 @@ Additionally, Frieda added a “necessary_libraries” section to the project do
 This was an improvement based on feedback from a previous project.
 
 ### 07.12.2025
-At first we believed we would not be able to print the 3D container. 
+At first, we believed we would not be able to print the 3D container. 
 However, Paula’s friend, who studies at TUHH, offered access to their 3D printing facilities. 
 With the friend’s experience in 3D printing, Paula was able to optimize her model. 
 As a result, the container could be printed more efficiently and with lower costs, using a filament thickness of 5%.
@@ -230,6 +228,10 @@ After a while she was able to insert it into the compartment which we had create
 ![buzzer_2](images/buzzer_2.JPG)
 Then she had to adjust the Arduino code once again yet this wasn't too difficult as we had once prepared a code which already had a part of the Pirates of the Caribbean music inserted.
 She went on and finalized all ideas for the final video. 
+
+### 09.03.2026
+Today, Frieda decided to further split the Python code into multiple Python files as the initial file: plant watering system had gotten a bit long. 
+Other than that she finished editing the documentation video. 
 
 ## division of our work: 
 Since this was a group project between two people, we divided the tasks between us. 
@@ -327,8 +329,8 @@ For debugging purposes, we pasted error messages of Arduino IDE or Python into C
 Additionally, we used AI to improve our documentation and refining the wording of explanations for clarity and precision. 
 When implementing the CSV files, especially the plant_health_ranges because it couldn't read the file properly due to too many ; and a different layout we asked ChatGPT what the solution would be. After manually changing the file accordingly, everything could be read correctly. 
 Additionally, we used AI in cases of design: For instance for the def show_history(self): we weren't sure how to change the colors of the headings and how to change the font from black to brown - so this is where we then inserted the code for the style.configure and added the table.tag_configure. We did the same for the def draw_graph(tab, y_values, ylabel, title): function to ensure that the graph would be according to the color scheme we had picked out. 
-Regarding Arduino IDE at the beginning we had troubles with the moisture, humdity and temperature reading - as our program showed the soil was dry - although it wasn't. We had to calibrate this accordingly and Chat GPT helped - we inserted the real numbers of wet, not wet and so on and then the numbers aligned. 
-
+Regarding Arduino IDE at the beginning we had troubles with the moisture, humidity and temperature reading - as our program showed the soil was dry - although it wasn't. We had to calibrate this accordingly and Chat GPT helped - we inserted the real numbers of wet, not wet and so on and then the numbers aligned. 
+We also used ChatGPT to help refactor the Python project by dividing the code into meaningful modules, improving organization and readability so it’s not just one long file.
 
 ## Next steps and takeaways: 
 - Since our plant lexicon does not currently include every possible plant, it could be expanded in future development stages by adding more plant species and their specific care requirements.
