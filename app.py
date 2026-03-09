@@ -151,6 +151,8 @@ class PlantMonitoringApp:
                     )
                     self.conn.commit()
 
+                    self.save_daily_reading()
+
             except serial.SerialException:
                 print("Lost connection to Arduino!")
                 self.serial_running = False
