@@ -13,14 +13,29 @@ It can generate health reports and alert when conditions require attention, help
 - Breadboard
 - Ultrasonic Sensor
 - LED
+- Display
 - Buzzer
-- Humidity and Temperature Sensor
+- Humidity and Temperature Sensor (DHT 22)
 - Soil Moistrue Sensor
 - Relay
 - 9V Battery
 - Water Pump
 - Resistor
 - Cables
+
+## pins
+### digital pins
+1 -> Ultrasonic Sensor Echo
+2 -> Ultrasonic Sensor Trig
+4 -> LED
+5 -> Relay IN
+6 -> DHT 22
+7 - 12 -> Display
+13 -> Buzzer
+
+### analog pins
+A0 -> Soil Moisture Sensor
+
 ## File overview 
 
 ├── arduinoIDE_code -> contains Arduino code <p>
