@@ -25,13 +25,13 @@ It can generate health reports and alert when conditions require attention, help
 
 ## pins
 ### digital pins
-1 -> Ultrasonic Sensor Echo
-2 -> Ultrasonic Sensor Trig
-4 -> LED
-5 -> Relay IN
-6 -> DHT 22
-7 - 12 -> Display
-13 -> Buzzer
+1 -> Ultrasonic Sensor Echo <p>
+2 -> Ultrasonic Sensor Trig<p>
+4 -> LED<p>
+5 -> Relay IN<p>
+6 -> DHT 22<p>
+7 - 12 -> Display<p>
+13 -> Buzzer<p>
 
 ### analog pins
 A0 -> Soil Moisture Sensor
