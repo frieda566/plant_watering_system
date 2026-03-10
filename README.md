@@ -7,6 +7,20 @@ It can generate health reports and alert when conditions require attention, help
 
 ## hardware
 ![hardware](images/hardware.jpg)
+
+## components used
+- Arduino Board
+- Breadboard
+- Ultrasonic Sensor
+- LED
+- Buzzer
+- Humidity and Temperature Sensor
+- Soil Moistrue Sensor
+- Relay
+- 9V Battery
+- Water Pump
+- Resistor
+- Cables
 ## File overview 
 
 ├── arduinoIDE_code -> contains Arduino code <p>
