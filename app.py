@@ -18,6 +18,7 @@ from views.graphs import show_graphs
 from views.lexicon import show_lexicon
 from views.plant_health import show_plant_health
 
+
 class PlantMonitoringApp:
 
     def __init__(self, root):
