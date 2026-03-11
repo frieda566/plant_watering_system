@@ -264,72 +264,60 @@ In addition, she created and edited the final project video independently.
 ## sources/ references: 
 sources see "Meetings"
 
+sources presented in our intermediate presentation: 
+- https://projecthub.arduino.cc/rudraksh2008/temperature-and-humidity-sensor-with-arduino-1d52a6
+- https://projecthub.arduino.cc/ksoderby/smart-plant-watering-with-arduino-iot-cloud-0dff1f
+- https://docs.arduino.cc/libraries/liquidcrystal/
+- https://randomnerdtutorials.com/complete-guide-for-dht11dht22-humidity-and-temperature-sensor-with-arduino/#:~:text=Wrapping%20Up,()%20and%20readHumidity()%20methods.
+- https://docs.python.org/3/library/tkinter.html
+- https://docs.python.org/3/library/sqlite3.html
+- https://docs.python.org/3.12/library/threading.html
+- https://docs.python.org/3/library/queue.html
+- https://pandas.pydata.org
+- https://docs.python.org/3/library/json.html
+- https://docs.python.org/3/library/os.html
+- https://docs.python.org/3/library/datetime.html
+- https://pypi.org/project/matplotlib/
+- https://projecthub.arduino.cc/ansh2919/serial-communication-between-python-and-arduino-663756
+
 for plant_health_ranges.csv:
-https://houseplantsnook.com/ultimate-parlor-palm-care-guide#:~:text=Clean%20and%20consistent%20root%20environment,t%20a%20long%2Dterm%20fix.
-
-https://www.patchplants.com/pages/plant-care/complete-guide-to-parlour-palm-care/
-
-https://plnts.com/en/care/houseplants-family/aglaonema
-
-https://www.plantvine.com/2024/05/13/maranta-prayer-plant-care-guide/#:~:text=Maintaining%20the%20right%20temperature%20and,or%20using%20a%20room%20humidifier.
-
-https://plnts.com/en/care/houseplants-family/calathea
-
-https://soltech.com/blogs/blog/spider-plant-growing-guide#:~:text=Temperature%20and%20Humidity&text=Ideally%2C%20they%20prosper%20in%20average,lush%20growth%20and%20vibrant%20foliage.
-
-https://soltech.com/products/stromanthe-triostar-care#:~:text=raise%20humidity%20levels.-,Temperature,Fahrenheit%20(15%20degrees%20Celsius).
-
-https://soltech.com/products/snake-plant-care#:~:text=Temperature,any%20potential%20temperature%2Drelated%20stress.
-
-https://mygreenscape.ca/pages/dracaena-plant-care#:~:text=Dracaena%20plants%20thrive%20in%20temperatures,drafts%20and%20sudden%20temperature%20changes.
-
-https://plnts.com/en/care/houseplants-family/zamioculcas
-
-https://plnts.com/en/care/houseplants-family/peperomia
-
-https://soltech.com/products/fiddle-leaf-fig-care#:~:text=Temperature,addition%20to%20any%20indoor%20space.
-
-https://easyplant.com/care/monstera-deliciosa
-
-https://plnts.com/en/care/houseplants-family/fittonia
-
-https://www.thesill.com/blogs/plants-101/how-to-care-for-golden-pothos-epipremnum-aureum
-
-https://www.rootskcmo.com/product/rhoeo-tricolor/1390#
-
-https://growhub.ae/blogs/blog/humidity-hacks-how-to-keep-your-peace-lily-thriving-in-dry-summer-air#:~:text=Ideal%20Humidity%20Range%20for%20Peace,so%20you%20can%20respond%20effectively.
-
-https://deepgreenpermaculture.com/2025/08/09/the-comprehensive-guide-to-caring-for-dumb-cane-dieffenbachia/#:~:text=Temperature%20and%20Humidity:%20Dieffenbachia%20prefers,especially%20in%20dry%20indoor%20climates.; https://www.almanac.com/plant/how-care-dieffenbachia-plants#:~:text=the%20fertilizer%20packaging.-,Humidity,pebble%20tray%20to%20raise%20humidity!
-
-https://www.bradyswest.com/philodendron#:~:text=Although%20the%20more%20humidity%20the%20better%2C%20a,of%2065%2D85%20degrees%20F%20(18%2D30%20degrees%20C).
-
-https://newnorthgreenhouses.ca/blogs/gardening-tips/lush-and-lovely-caring-for-boston-ferns-in-spring-and-summer#:~:text=Humidity%20and%20Temperature:%20Boston%20ferns,the%20risk%20of%20fungal%20infections.
-
-https://www.urbanplant.in/a/blog/post/how-to-grow-and-care-for-rubber-plants-at-home-the-ultimate-indoor-guide#:~:text=Ideal%20Range:,Humidity:%2040–60%25
-
-https://growtropicals.com/blogs/plant-care-a-z/pilea#:~:text=What%20temperature%20and%20humidity%20do,levels%20between%2040–60%25.&text=Avoid%20cold%20drafts%20(like%20near,to%20curl%20or%20drop%20prematurely.
-
-https://chaletboutique.com.au/blogs/plant-care/tradescantia-care-guide#:~:text=WHAT%20IS%20THE%20BEST%20HUMIDITY,which%20is%20average%20room%20humidity.
-
-https://www.thesill.com/blogs/plants-101/how-to-care-for-a-zebra-plant#:~:text=Humidity,to%20dry%20out%20or%20wilt.
-
-https://plantsome.ca/blogs/blog/how-to-care-for-alocasia-indoors#:~:text=Alocasia%20plants%20hail%20from%20tropical,Soil%20and%20Fertilization
-
-https://greg.app/string-of-pearls-indoor-care/#:~:text=String%20of%20Pearls%20thrive%20in%20low%20to%20moderate%20humidity%2C%20ideally,it%20remains%20healthy%20and%20vibrant.
-
-https://soltech.com/products/string-of-hearts-care
-
-https://www.thesill.com/blogs/plants-101/how-to-care-for-bird-of-paradise
-
-https://greg.app/hoya-sunrise-temperature/#:~:text=🌡%EF%B8%8F%20Home%20Sweet%20Home:%20Creating,coffee%20shop's%20reliable%20Wi%2DFi.
-
+- https://houseplantsnook.com/ultimate-parlor-palm-care-guide#:~:text=Clean%20and%20consistent%20root%20environment,t%20a%20long%2Dterm%20fix.
+- https://www.patchplants.com/pages/plant-care/complete-guide-to-parlour-palm-care/
+- https://plnts.com/en/care/houseplants-family/aglaonema
+- https://www.plantvine.com/2024/05/13/maranta-prayer-plant-care-guide/#:~:text=Maintaining%20the%20right%20temperature%20and,or%20using%20a%20room%20humidifier.
+- https://plnts.com/en/care/houseplants-family/calathea
+- https://soltech.com/blogs/blog/spider-plant-growing-guide#:~:text=Temperature%20and%20Humidity&text=Ideally%2C%20they%20prosper%20in%20average,lush%20growth%20and%20vibrant%20foliage.
+- https://soltech.com/products/stromanthe-triostar-care#:~:text=raise%20humidity%20levels.-,Temperature,Fahrenheit%20(15%20degrees%20Celsius).
+- https://soltech.com/products/snake-plant-care#:~:text=Temperature,any%20potential%20temperature%2Drelated%20stress.
+- https://mygreenscape.ca/pages/dracaena-plant-care#:~:text=Dracaena%20plants%20thrive%20in%20temperatures,drafts%20and%20sudden%20temperature%20changes.
+- https://plnts.com/en/care/houseplants-family/zamioculcas
+- https://plnts.com/en/care/houseplants-family/peperomia
+- https://soltech.com/products/fiddle-leaf-fig-care#:~:text=Temperature,addition%20to%20any%20indoor%20space.
+- https://easyplant.com/care/monstera-deliciosa
+- https://plnts.com/en/care/houseplants-family/fittonia
+- https://www.thesill.com/blogs/plants-101/how-to-care-for-golden-pothos-epipremnum-aureum
+- https://www.rootskcmo.com/product/rhoeo-tricolor/1390#
+- https://growhub.ae/blogs/blog/humidity-hacks-how-to-keep-your-peace-lily-thriving-in-dry-summer-air#:~:text=Ideal%20Humidity%20Range%20for%20Peace,so%20you%20can%20respond%20effectively.
+- https://deepgreenpermaculture.com/2025/08/09/the-comprehensive-guide-to-caring-for-dumb-cane-dieffenbachia/#:~:text=Temperature%20and%20Humidity:%20Dieffenbachia%20prefers,especially%20in%20dry%20indoor%20climates.; https://www.almanac.com/plant/how-care-dieffenbachia-plants#:~:text=the%20fertilizer%20packaging.-,Humidity,pebble%20tray%20to%20raise%20humidity!
+- https://www.bradyswest.com/philodendron#:~:text=Although%20the%20more%20humidity%20the%20better%2C%20a,of%2065%2D85%20degrees%20F%20(18%2D30%20degrees%20C).
+- https://newnorthgreenhouses.ca/blogs/gardening-tips/lush-and-lovely-caring-for-boston-ferns-in-spring-and-summer#:~:text=Humidity%20and%20Temperature:%20Boston%20ferns,the%20risk%20of%20fungal%20infections.
+- https://www.urbanplant.in/a/blog/post/how-to-grow-and-care-for-rubber-plants-at-home-the-ultimate-indoor-guide#:~:text=Ideal%20Range:,Humidity:%2040–60%25
+- https://growtropicals.com/blogs/plant-care-a-z/pilea#:~:text=What%20temperature%20and%20humidity%20do,levels%20between%2040–60%25.&text=Avoid%20cold%20drafts%20(like%20near,to%20curl%20or%20drop%20prematurely.
+- https://chaletboutique.com.au/blogs/plant-care/tradescantia-care-guide#:~:text=WHAT%20IS%20THE%20BEST%20HUMIDITY,which%20is%20average%20room%20humidity.
+- https://www.thesill.com/blogs/plants-101/how-to-care-for-a-zebra-plant#:~:text=Humidity,to%20dry%20out%20or%20wilt.
+- https://plantsome.ca/blogs/blog/how-to-care-for-alocasia-indoors#:~:text=Alocasia%20plants%20hail%20from%20tropical,Soil%20and%20Fertilization
+- https://greg.app/string-of-pearls-indoor-care/#:~:text=String%20of%20Pearls%20thrive%20in%20low%20to%20moderate%20humidity%2C%20ideally,it%20remains%20healthy%20and%20vibrant.
+- https://soltech.com/products/string-of-hearts-care
+- https://www.thesill.com/blogs/plants-101/how-to-care-for-bird-of-paradise
+- https://greg.app/hoya-sunrise-temperature/#:~:text=🌡%EF%B8%8F%20Home%20Sweet%20Home:%20Creating,coffee%20shop's%20reliable%20Wi%2DFi.
 
 ## AI usage: 
+At the beginning of the project, we used ChatGPT to get initial ideas for how the Python application could be structured and what components would be necessary (e.g., dashboard, history, graphs).
 For debugging purposes, we pasted error messages of Arduino IDE or Python into ChatGPT to better understand their causes and explore possible solutions. 
 Additionally, we used AI to improve our documentation and refining the wording of explanations for clarity and precision. 
 When implementing the CSV files, especially the plant_health_ranges because it couldn't read the file properly due to too many ; and a different layout we asked ChatGPT what the solution would be. After manually changing the file accordingly, everything could be read correctly. 
 Additionally, we used AI in cases of design: For instance for the def show_history(self): we weren't sure how to change the colors of the headings and how to change the font from black to brown - so this is where we then inserted the code for the style.configure and added the table.tag_configure. We did the same for the def draw_graph(tab, y_values, ylabel, title): function to ensure that the graph would be according to the color scheme we had picked out. 
-Regarding Arduino IDE at the beginning we had troubles with the moisture, humidity and temperature reading - as our program showed the soil was dry - although it wasn't. We had to calibrate this accordingly and Chat GPT helped - we inserted the real numbers of wet, not wet and so on and then the numbers aligned. 
+Regarding Arduino IDE at the beginning we had troubles with the moisture, humidity and temperature reading - as our program showed the soil was dry - although it wasn't. We had to calibrate this accordingly and ChatGPT helped - we inserted the real numbers of wet, not wet and so on and then the numbers aligned. 
 We also used ChatGPT to help refactor the Python project by dividing the code into meaningful modules, improving organization and readability so it’s not just one long file.
 
 ## Next steps and takeaways: 
