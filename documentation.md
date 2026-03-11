@@ -169,9 +169,6 @@ We are still unsure whether we will keep this approach or experiment further wit
 We also discussed adding a combined graph that summarizes several environmental factors and possibly provides interpretations of what the data indicates about plant health. 
 This could potentially be achieved by comparing the recorded data with the information from the plant lexicon.
 
-Additionally, Frieda added a “necessary_libraries” section to the project documentation so that users know which libraries must be installed for the program to run. 
-This was an improvement based on feedback from a previous project.
-
 ### 07.12.2025
 At first, we believed we would not be able to print the 3D container. 
 However, Paula’s friend, who studies at TUHH, offered access to their 3D printing facilities. 

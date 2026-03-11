@@ -1,7 +1,0 @@
-Paste the following segment into your Python Terminal to ensure our code will work within your environment: 
-
-pip install pandas
-pip install pyserial
-
-The following libraries are part of Python's standard library and require no installation:
-tkinter, sqlite3, threading, queue, json, os, datetime
