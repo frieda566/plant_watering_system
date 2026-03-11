@@ -1,5 +1,8 @@
 # Flower power - Our plant watering system
 
+### Our setup 
+![final_setup](images/final_setup.JPG)
+
 ### Description 
 This project combines an Arduino Uno with sensors and Python software to monitor plant health and automate watering. 
 The system measures soil moisture, temperature, and humidity, stores the data, and compares it to optimal ranges for each plant. 
@@ -16,7 +19,7 @@ It can generate health reports and alert when conditions require attention, help
 - Display
 - Buzzer
 - Humidity and Temperature Sensor (DHT 22)
-- Soil Moistrue Sensor
+- Soil Moisture Sensor
 - Relay
 - 9V Battery
 - Water Pump
@@ -77,4 +80,4 @@ pip install pyserial
 ```
 
 ## Start the interface
-Run `plant_watering_system.py`
+
