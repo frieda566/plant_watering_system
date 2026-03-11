@@ -4,7 +4,7 @@
 ![setup_09.12.2025](images/setup_09.12.2025.JPG)
 ![sketch_GUI](images/sketch_GUI.JPG)
 
-3D container: 
+### 3D container: 
 ![3d-print1](images/3d-print1.jpg)
 ![3d-print2](images/3d-print2.jpg)
 
