@@ -1,8 +1,6 @@
 import tkinter as tk
-from tkinter import ttk
 from datetime import datetime, timedelta
 from ui_components import create_styled_button
-
 
 def show_plant_health(app):
 
@@ -22,30 +20,39 @@ def show_plant_health(app):
 
     tk.Label(
         frame,
-        text="Select your plant:",
+        text="Search your plant:",
         bg=app.colors["cream"],
         fg=app.colors["dark_green"],
-        font=("Helvetica", 14)
-    ).pack(pady=5)
+        font=("Helvetica", 14, "bold")
+    ).pack(pady=(5, 2))
 
-    plant_var = tk.StringVar()
+    # Search variable
+    app.health_search_var = tk.StringVar()
+    app.health_search_var.trace("w", lambda *args: filter_health_plants(app))
 
-    plant_names = app.lexicon_df["Plant Name"].tolist()
-
-    dropdown = ttk.Combobox(
+    # Styled search bar
+    search_entry = tk.Entry(
         frame,
-        textvariable=plant_var,
-        values=plant_names,
-        state="readonly",
-        width=30
+        textvariable=app.health_search_var,
+        width=30,
+        font=("Helvetica", 11),
+        bg=app.colors["lime"],
+        fg=app.colors["dark_green"],
+        relief="flat",
+        bd=4,
+        insertbackground=app.colors["dark_green"]
     )
-    dropdown.pack(pady=10)
+    search_entry.pack(pady=5)
+    search_entry.focus_set()
 
-    create_styled_button(
+    # Results container
+    app.results_frame = tk.Frame(
         frame,
-        "Generate Health Report",
-        lambda: generate_health_report(app, plant_var.get(), frame)
+        bg=app.colors["cream"],
+        padx=5,
+        pady=5
     )
+    app.results_frame.pack(pady=5)
 
     create_styled_button(
         frame,
@@ -53,6 +60,51 @@ def show_plant_health(app):
         app.setup_main_menu
     )
 
+def filter_health_plants(app):
+
+    query = app.health_search_var.get().lower()
+
+    # Clear previous results
+    for widget in app.results_frame.winfo_children():
+        widget.destroy()
+
+    if not query:
+        return
+
+    matches = [
+        name for name in app.lexicon_df["Plant Name"]
+        if query in name.lower()
+    ][:6]
+
+    for plant in matches:
+
+        lbl = tk.Label(
+            app.results_frame,
+            text=plant,
+            font=("Helvetica", 11),
+            bg=app.colors["sage"],
+            fg=app.colors["dark_green"],
+            anchor="w",
+            padx=10,
+            pady=4,
+            cursor="hand2"
+        )
+        lbl.pack(fill="x", pady=1)
+
+        # Click event
+        lbl.bind(
+            "<Button-1>",
+            lambda e, p=plant: generate_health_report(app, p, app.results_frame.master)
+        )
+
+        # Hover effect
+        def on_enter(e, widget=lbl):
+            widget.config(bg=app.colors["lime"])
+        def on_leave(e, widget=lbl):
+            widget.config(bg=app.colors["sage"])
+
+        lbl.bind("<Enter>", on_enter)
+        lbl.bind("<Leave>", on_leave)
 
 def get_last_week_data(app):
 
@@ -70,7 +122,6 @@ def get_last_week_data(app):
     ]
 
     return week_data
-
 
 def get_optimal_ranges(app, plant_name):
 
@@ -91,7 +142,6 @@ def get_optimal_ranges(app, plant_name):
         "moisture": (30, 60)
     }
 
-
 def analyze_week(app, week_data, optimal):
 
     avg_temp = sum(d["temperature"] for d in week_data) / len(week_data)
@@ -104,11 +154,7 @@ def analyze_week(app, week_data, optimal):
         f"🌱 Soil Moisture ({avg_moist:.1f}%): {compare_value(avg_moist, *optimal['moisture'])}"
     ]
 
-
 def generate_health_report(app, plant_name, parent):
-
-    if not plant_name:
-        return
 
     plant_row = app.lexicon_df[
         app.lexicon_df["Plant Name"] == plant_name
@@ -168,7 +214,6 @@ def generate_health_report(app, plant_name, parent):
             font=("Helvetica", 12),
             anchor="w"
         ).pack(fill="x")
-
 
 def compare_value(value, min_val, max_val):
 

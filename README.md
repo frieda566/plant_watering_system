@@ -74,7 +74,6 @@ A0 -> Soil Moisture Sensor
 ├── app.py -> monitoring plant health <p>
 ├── main.py -> start application <p>
 ├── ui_components.py -> UI design <p>
-├── plant watering system.py -> main Python application <p>
 ├── plant_care_lexicon.csv -> contains plant-specific information<p>
 └── plant_health_ranges.csv -> reference table for optimum state for individual plants <p>
 
