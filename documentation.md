@@ -228,7 +228,7 @@ She went on and finalized all ideas for the final video.
 
 ### 09.03.2026
 Today, Frieda decided to further split the Python code into multiple Python files as the initial file: plant watering system had gotten a bit long. 
-Other than that she finished editing the documentation video. 
+Other than that she finished editing the demo video. 
 
 ### 12.03.2026
 Today, we finalized the design in plant_health.py which had initially caused problems because we initially used ttk.Combobox and couldn't match our discussed design anymore.
