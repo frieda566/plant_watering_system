@@ -41,10 +41,20 @@ A0 -> Soil Moisture Sensor
 
 ## File overview 
 
-├── arduinoIDE_code -> contains Arduino code <p>
+├── arduinoIDE_code/ -> contains Arduino code <p>
+    └── arduino.ino<p>
 ├── images -> stores the images used for Python GUI or documentation <p>
+├── views -> stores python code files for different windows <p>
+    └── dashboard.py<p>
+    └── graphs.py<p>
+    └── history.py<p>
+    └── lexicon.py<p>
+    └── plant_health.py<p>  
 ├── documentation -> contains the process of this project <p>
 ├── README.md -> general project overview <p>
+├── app.py -> monitoring plant health <p>
+├── main.py -> start application <p>
+├── ui_components.py -> UI design <p>
 ├── plant watering system.py -> main Python application <p>
 ├── plant_care_lexicon.csv -> contains plant-specific information<p>
 └── plant_health_ranges.csv -> reference table for optimum state for individual plants <p>
