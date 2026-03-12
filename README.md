@@ -5,6 +5,8 @@ This project combines an Arduino Uno with sensors and Python software to monitor
 The system measures soil moisture, temperature, and humidity, stores the data, and compares it to optimal ranges for each plant. 
 It can generate health reports and alert when conditions require attention, helping maintain healthy plants efficiently.
 
+### Demo video: [https://drive.google.com/file/d/1g_6uH29uKihcayzZ0cg3SZgwNqI0mKgL/view?usp=share_link]()
+
 ### Our setup 
 ![final_setup](images/final_setup.JPG)
 
@@ -27,10 +29,10 @@ In addition to the live monitoring features, the Python interface includes a pla
 These rely on external datasets that contain information about plant care requirements and optimal environmental ranges. 
 By comparing the measured values with these reference ranges, the system can provide feedback about the plant’s overall health and growing conditions.
 
-## hardware
+### hardware
 ![hardware](images/hardware.jpg)
 
-## components used
+### components used
 - Arduino Board
 - Breadboard
 - Ultrasonic Sensor
@@ -45,8 +47,8 @@ By comparing the measured values with these reference ranges, the system can pro
 - Resistor
 - Cables
 
-## pins
-### digital pins
+### pins
+#### digital pins
 1 -> Ultrasonic Sensor Echo <p>
 2 -> Ultrasonic Sensor Trig<p>
 4 -> LED<p>
@@ -55,10 +57,10 @@ By comparing the measured values with these reference ranges, the system can pro
 7 - 12 -> Display<p>
 13 -> Buzzer<p>
 
-### analog pins
+#### analog pins
 A0 -> Soil Moisture Sensor
 
-## File overview 
+### File overview 
 
 ├── arduinoIDE_code/ -> contains Arduino code <p>
     └── arduino.ino<p>
@@ -78,7 +80,7 @@ A0 -> Soil Moisture Sensor
 └── plant_health_ranges.csv -> reference table for optimum state for individual plants <p>
 
 
-## Libraries
+### Libraries
 
 This project uses both Arduino and Python libraries.
 
@@ -107,7 +109,7 @@ pip install pandas
 pip install pyserial
 ```
 
-## Start the interface
+### Start the interface
 Run ui_components.py
 Run dashboard.py
 Run graphs.py
