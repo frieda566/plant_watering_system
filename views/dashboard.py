@@ -5,7 +5,6 @@ from ui_components import create_styled_button
 
 def show_dashboard(app):
     """Display live dashboard with soil moisture, temperature, and humidity."""
-
     for widget in app.root.winfo_children():
         widget.destroy()
 
@@ -20,11 +19,11 @@ def show_dashboard(app):
         fg=app.colors["dark_green"]
     ).pack(pady=20)
 
-    # live data labels container (placed in center)
+    # Live data labels container (placed in center)
     content = tk.Frame(frame, bg=app.colors["cream"])
     content.place(relx=0.5, rely=0.5, anchor="center")
 
-    # live data labels
+    # Live data labels
     app.moisture_label = tk.Label(frame, text="Soil Moisture: --%",
                                   font=("Helvetica", 16, "bold"),
                                   bg=app.colors["cream"], fg=app.colors["brown"])
@@ -48,7 +47,6 @@ def show_dashboard(app):
 
 def update_dashboard(app):
     """Update live readings every second."""
-
     if hasattr(app, "moisture_label") and app.moisture_label.winfo_exists():
         app.moisture_label.config(text=f"Soil Moisture: {app.latest_data['moisture']}%")
         app.temperature_label.config(text=f"Temperature: {app.latest_data['temperature']}°C")
@@ -63,7 +61,6 @@ def update_dashboard(app):
 
 def read_serial_loop(app):
     """Background thread reading Arduino messages."""
-
     while app.serial_running:
         try:
             line = app.serial.readline().decode().strip()

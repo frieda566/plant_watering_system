@@ -2,14 +2,16 @@ import tkinter as tk
 from datetime import datetime, timedelta
 from ui_components import create_styled_button
 
-def show_plant_health(app):
 
+# Main function to display plant health interface
+def show_plant_health(app):
+    # Clear previous content in root window
     for widget in app.root.winfo_children():
         widget.destroy()
-
+    # Main frame with background color
     frame = tk.Frame(app.root, bg=app.colors["cream"])
     frame.pack(fill="both", expand=True, padx=20, pady=20)
-
+    # Title label
     tk.Label(
         frame,
         text="🌱 Weekly Plant Health",
@@ -17,7 +19,7 @@ def show_plant_health(app):
         bg=app.colors["cream"],
         fg=app.colors["dark_green"]
     ).pack(pady=10)
-
+    # Search bar label
     tk.Label(
         frame,
         text="Search your plant:",
@@ -60,8 +62,9 @@ def show_plant_health(app):
         app.setup_main_menu
     )
 
-def filter_health_plants(app):
 
+# Filter plants based on search query
+def filter_health_plants(app):
     query = app.health_search_var.get().lower()
 
     # Clear previous results
@@ -70,14 +73,14 @@ def filter_health_plants(app):
 
     if not query:
         return
-
+    # find matches in plant lexicon (max 6 results)
     matches = [
-        name for name in app.lexicon_df["Plant Name"]
-        if query in name.lower()
-    ][:6]
+                  name for name in app.lexicon_df["Plant Name"]
+                  if query in name.lower()
+              ][:6]
 
     for plant in matches:
-
+        # label for each search result
         lbl = tk.Label(
             app.results_frame,
             text=plant,
@@ -100,36 +103,39 @@ def filter_health_plants(app):
         # Hover effect
         def on_enter(e, widget=lbl):
             widget.config(bg=app.colors["lime"])
+
         def on_leave(e, widget=lbl):
             widget.config(bg=app.colors["sage"])
 
         lbl.bind("<Enter>", on_enter)
         lbl.bind("<Leave>", on_leave)
 
-def get_last_week_data(app):
 
+# Retrieve last 7 days of sensor data
+def get_last_week_data(app):
     history = app.load_history()
 
     now = datetime.now()
     week_ago = now - timedelta(days=7)
-
+    # Filter data for the last week and valid measurements
     week_data = [
         d for d in history
         if datetime.strptime(d["timestamp"], "%Y-%m-%d %H:%M:%S") >= week_ago
-        and d["temperature"] > 0
-        and d["humidity"] > 0
-        and d["moisture"] > 0
+           and d["temperature"] > 0
+           and d["humidity"] > 0
+           and d["moisture"] > 0
     ]
 
     return week_data
 
-def get_optimal_ranges(app, plant_name):
 
+# Get optimal ranges for a given plant
+def get_optimal_ranges(app, plant_name):
     plant_name_clean = plant_name.strip().lower()
 
     row = app.health_df[
         app.health_df["Plant Name"].str.strip().str.lower() == plant_name_clean
-    ]
+        ]
 
     if row.empty:
         return None
@@ -142,8 +148,9 @@ def get_optimal_ranges(app, plant_name):
         "moisture": (30, 60)
     }
 
-def analyze_week(app, week_data, optimal):
 
+# Analyze the week's data against optimal ranges
+def analyze_week(app, week_data, optimal):
     avg_temp = sum(d["temperature"] for d in week_data) / len(week_data)
     avg_hum = sum(d["humidity"] for d in week_data) / len(week_data)
     avg_moist = sum(d["moisture"] for d in week_data) / len(week_data)
@@ -154,17 +161,17 @@ def analyze_week(app, week_data, optimal):
         f"🌱 Soil Moisture ({avg_moist:.1f}%): {compare_value(avg_moist, *optimal['moisture'])}"
     ]
 
-def generate_health_report(app, plant_name, parent):
 
+# Generate detailed health report for a plant
+def generate_health_report(app, plant_name, parent):
     plant_row = app.lexicon_df[
         app.lexicon_df["Plant Name"] == plant_name
-    ].iloc[0]
+        ].iloc[0]
 
     optimal = get_optimal_ranges(app, plant_name)
     week_data = get_last_week_data(app)
 
     if not optimal:
-
         tk.Label(
             parent,
             text="No health reference data available for this plant.",
@@ -173,9 +180,8 @@ def generate_health_report(app, plant_name, parent):
         ).pack()
 
         return
-
+    # Handle missing weekly data
     if not week_data:
-
         tk.Label(
             parent,
             text="No weekly data available yet.",
@@ -184,9 +190,9 @@ def generate_health_report(app, plant_name, parent):
         ).pack()
 
         return
-
+    # Analyze week and prepare feedback
     feedback = analyze_week(app, week_data, optimal)
-
+    # Frame to hold report
     report_frame = tk.Frame(
         parent,
         bg=app.colors["sage"],
@@ -195,7 +201,7 @@ def generate_health_report(app, plant_name, parent):
     )
 
     report_frame.pack(fill="x", pady=20)
-
+    # Report title
     tk.Label(
         report_frame,
         text=f"Weekly Health Report for {plant_name}",
@@ -205,7 +211,6 @@ def generate_health_report(app, plant_name, parent):
     ).pack(pady=5)
 
     for line in feedback:
-
         tk.Label(
             report_frame,
             text=line,
@@ -215,8 +220,9 @@ def generate_health_report(app, plant_name, parent):
             anchor="w"
         ).pack(fill="x")
 
-def compare_value(value, min_val, max_val):
 
+# Compare a value to min/max and return feedback
+def compare_value(value, min_val, max_val):
     if value < min_val:
         return "⚠ Too low"
 

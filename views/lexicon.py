@@ -4,10 +4,12 @@ from ui_components import create_styled_button, create_styled_scrollbar
 
 
 def show_lexicon(app):
-
+    # Display the plant lexicon with a searchable list of plants
+    # Clear current UI
     for widget in app.root.winfo_children():
         widget.destroy()
 
+    # Main frame
     main_frame = tk.Frame(app.root, bg=app.colors["cream"])
     main_frame.pack(fill="both", expand=True, padx=20, pady=20)
 
@@ -25,9 +27,9 @@ def show_lexicon(app):
         fg=app.colors["dark_green"]
     ).pack()
 
-    # Search bar
+    # ---------------- Search Bar ----------------
     app.search_var = tk.StringVar()
-    app.search_var.trace("w", lambda *args: filter_plants(app))
+    app.search_var.trace("w", lambda *args: filter_plants(app))  # Updates as user types
 
     search_container = tk.Frame(main_frame, bg=app.colors["cream"])
     search_container.pack(pady=(10, 20))
@@ -46,7 +48,7 @@ def show_lexicon(app):
 
     search_entry.pack(pady=5)
 
-    # Scrollable container
+    # # ---------------- Scrollable Plant List ----------------
     app.scroll_container = tk.Frame(main_frame, bg=app.colors["cream"])
     app.scroll_container.pack(fill="both", expand=True)
 
@@ -60,7 +62,7 @@ def show_lexicon(app):
     scrollbar.config(command=canvas.yview)
 
     canvas.configure(yscrollcommand=scrollbar.set)
-
+    # Frame inside canvas to hold plant cards
     app.scroll_frame = tk.Frame(canvas, bg=app.colors["cream"])
 
     canvas_window = canvas.create_window(
@@ -86,7 +88,7 @@ def show_lexicon(app):
     app.plant_cards = []
 
     for _, row in app.lexicon_df.iterrows():
-
+        # Card container
         card = tk.Frame(
             app.scroll_frame,
             bg=app.colors["brown"],
@@ -95,7 +97,7 @@ def show_lexicon(app):
         )
 
         card.pack(fill="x", pady=5, padx=5)
-
+        # Inner frame for plant info and button
         inner = tk.Frame(
             card,
             bg=app.colors["sage"],
@@ -108,7 +110,7 @@ def show_lexicon(app):
         inner.pack_propagate(False)
         inner.config(height=60)
 
-        # Plant name
+        # Plant name label
         name_label = tk.Label(
             inner,
             text=row["Plant Name"],
@@ -157,7 +159,7 @@ def show_lexicon(app):
             (btn.config(bg=app.colors["lime"]),
              frame.config(bg=app.colors["lime"]))
         )
-
+        # Store cards for filtering
         app.plant_cards.append((card, row["Plant Name"].lower()))
 
     # Back button
@@ -169,7 +171,7 @@ def show_lexicon(app):
 
 
 def filter_plants(app):
-
+    # Filter displayed plant cards based on search query
     query = app.search_var.get().lower()
 
     for card, name in app.plant_cards:
@@ -181,13 +183,13 @@ def filter_plants(app):
 
 
 def show_lexicon_popup(app, row):
-
+    # Display detailed information about a specific plant in a popup window
     popup = tk.Toplevel(app.root)
 
     popup.title(row["Plant Name"])
     popup.configure(bg=app.colors["cream"])
     popup.geometry("500x500")
-
+    # Scrollable canvas
     canvas = tk.Canvas(
         popup,
         bg=app.colors["cream"],
@@ -213,7 +215,7 @@ def show_lexicon_popup(app, row):
     scrollbar.pack(side="right", fill="y")
 
     def add_info_line(parent, headline, value):
-
+        # Helper function to add info lines with separators
         tk.Label(
             parent,
             text=headline,
@@ -240,6 +242,7 @@ def show_lexicon_popup(app, row):
             pady=5
         )
 
+    # Add plant info fields
     add_info_line(scroll_frame, "🌞 Light Preferences:", row['Light Preferences'])
     add_info_line(scroll_frame, "💧 Watering:", row['Watering'])
     add_info_line(scroll_frame, "🪴 Soil Type / Drainage:", row.get('Soil Type/Drainage', 'N/A'))
@@ -248,7 +251,7 @@ def show_lexicon_popup(app, row):
     add_info_line(scroll_frame, "⚠️ Common Problems:", row.get('Common Problems', 'N/A'))
     add_info_line(scroll_frame, "🌱 Propagation:", row.get('Propagation', 'N/A'))
     add_info_line(scroll_frame, "☠️ Toxicity:", row.get('Toxicity', 'N/A'))
-
+    # Close button
     create_styled_button(
         scroll_frame,
         "✓ Close",

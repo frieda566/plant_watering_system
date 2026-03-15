@@ -3,7 +3,7 @@ from tkinter import ttk
 
 
 def create_styled_button(parent, text, command):
-
+    # Create a reusable, styled button with custom colors and padding
     outer = tk.Frame(parent, bg="#89725B")
     outer.pack(pady=8)
 
@@ -30,7 +30,7 @@ def create_styled_button(parent, text, command):
 
 
 def create_styled_scrollbar(parent):
-
+    # Create a reusable, vertically oriented scrollbar with custom styling
     style = ttk.Style()
     style.theme_use("clam")
 

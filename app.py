@@ -1,15 +1,13 @@
 import sqlite3
 import threading
 import tkinter as tk
-from datetime import datetime
-
 import pandas as pd
 import queue
 import json
 import os
 import serial.tools.list_ports
-
 import serial
+from datetime import datetime
 
 from ui_components import create_styled_button
 from views.dashboard import show_dashboard
@@ -20,14 +18,17 @@ from views.plant_health import show_plant_health
 
 
 class PlantMonitoringApp:
+    """Main application class for the Plant Monitoring System GUI.
+    Handles UI, Arduino serial data collection, database storage, and history logging."""
 
     def __init__(self, root):
-
+        # Initialize the app, setup UI, load datasets, and configure serial connection
         self.root = root
         self.root.title("Plant Monitoring System")
         self.root.geometry("900x700")
         self.root.minsize(800, 600)
 
+        # Color scheme
         self.colors = {
             "green_bg": "#677E52",
             "cream": "#F6E8B1",
@@ -39,8 +40,10 @@ class PlantMonitoringApp:
 
         self.root.configure(bg=self.colors["green_bg"])
 
+        # Latest sensor data (updated by Arduino)
         self.latest_data = {"moisture": 0, "temperature": 0, "humidity": 0}
 
+        # Queue for handling data in multithreaded context
         self.data_queue = queue.Queue()
 
         # History JSON
@@ -59,6 +62,8 @@ class PlantMonitoringApp:
         # ---------- Data / DB ----------
         self.data_queue = queue.Queue()
         self.latest_data = {"moisture": 0, "temperature": 0, "humidity": 0}
+
+        # ---------------- Setup SQLite database ----------------
         self.conn = sqlite3.connect("plant_data.db", check_same_thread=False)
         self.cur = self.conn.cursor()
         self.cur.execute("""
@@ -79,29 +84,34 @@ class PlantMonitoringApp:
                 self.serial_port = p.device
                 break
 
-        # optional: force specific port
+        # Optional: force specific port
         self.serial_port = '/dev/cu.usbmodem11401'  # insert the name of your port
         if self.serial_port is None:
             print("⚠ No Arduino detected. Running without live data.")
         else:
             try:
+                # Open serial connection and start reading thread
                 self.serial = serial.Serial(self.serial_port, 9600, timeout=1)
                 threading.Thread(target=self.read_serial_loop, daemon=True).start()
                 print("✓ Serial connection established on:", self.serial_port)
             except:
                 print("⚠ Could not open serial port.")
 
-        # Build menu
+        # ---------------- Setup main menu ----------------
         self.setup_main_menu()
 
+    # ---------------- GUI Menu ----------------
     def setup_main_menu(self):
-
+        """Display the main menu with navigation buttons to all app features."""
+        # Clear previous UI
         for widget in self.root.winfo_children():
             widget.destroy()
 
+        # Main frame
         frame = tk.Frame(self.root, bg=self.colors["green_bg"])
         frame.pack(fill="both", expand=True, padx=30, pady=30)
 
+        # Title label
         tk.Label(
             frame,
             text="🌱 Plant Monitoring System",
@@ -110,6 +120,7 @@ class PlantMonitoringApp:
             fg="white"
         ).pack(pady=(20, 40))
 
+        # Navigation buttons
         create_styled_button(frame, "📊 Dashboard",
                              lambda: show_dashboard(self))
         create_styled_button(frame, "📜 History",
@@ -122,6 +133,7 @@ class PlantMonitoringApp:
                              lambda: show_plant_health(self))
         create_styled_button(frame, "❌ Exit", self.root.quit)
 
+    # ---------------- Serial Data Handling ----------------
     def read_serial_loop(self):
         """Background thread reading Arduino messages."""
         while self.serial_running:
@@ -134,6 +146,7 @@ class PlantMonitoringApp:
                 parts = line.split(",")
                 data = {}
 
+                # Parse Arduino message
                 for p in parts:
                     if p.startswith("M:"):
                         data["moisture"] = int(p[2:])
@@ -142,16 +155,17 @@ class PlantMonitoringApp:
                     elif p.startswith("H:"):
                         data["humidity"] = int(p[2:])
 
+                # Update latest data if all values received
                 if len(data) == 3:
                     self.latest_data = data
-
+                    # Insert into SQLite database
                     ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     self.cur.execute(
                         "INSERT INTO readings (timestamp, moisture, temperature, humidity) VALUES (?, ?, ?, ?)",
                         (ts, data["moisture"], data["temperature"], data["humidity"])
                     )
                     self.conn.commit()
-
+                    # Save to daily JSON file if appropriate
                     self.save_daily_reading()
 
             except serial.SerialException:
@@ -162,9 +176,10 @@ class PlantMonitoringApp:
             except Exception as e:
                 print("Serial error:", e)
 
+    # ---------------- Daily JSON History ----------------
     def save_daily_reading(self):
         now = datetime.now()
-        # Only record if current time is 2 PM and not already saved today
+        # Only record if current time is at around 2 PM and not already saved today
         if now.hour == 14:
             data = []
             if os.path.exists(self.history_file):
@@ -188,6 +203,7 @@ class PlantMonitoringApp:
                 json.dump(data, f, indent=4)
 
     def load_history(self):
+        # Load historical plant data from JSON file
         if os.path.exists(self.history_file):
             with open(self.history_file, "r") as f:
                 data = json.load(f)

@@ -6,13 +6,13 @@ from ui_components import create_styled_button
 
 
 def show_graphs(app):
-    """Display graphs for moisture, temperature, and humidity over time."""
-
+    # Display graphs for moisture, temperature, and humidity over time
+    # Clear current UI
     app.clear_window()
-
+    # Main frame
     frame = tk.Frame(app.root, bg=app.colors["cream"])
     frame.pack(fill="both", expand=True, padx=20, pady=20)
-
+    # Title label
     tk.Label(
         frame,
         text="📈 Graphs",
@@ -21,8 +21,9 @@ def show_graphs(app):
         fg=app.colors["dark_green"]
     ).pack(pady=10)
 
+    # ---------------- Notebook Style ----------------
     style = ttk.Style()
-    style.theme_use("clam")
+    style.theme_use("clam")  # Needed for color customization
 
     style.configure(
         "CustomNotebook.TNotebook",
@@ -77,21 +78,21 @@ def show_graphs(app):
         fig = plt.Figure(figsize=(7, 4), dpi=100)
         ax = fig.add_subplot(111)
 
-        # plot line
+        # Plot line
         ax.plot(timestamps, y_values, marker="o", linewidth=2, color=app.colors["sage"])
 
-        # title
+        # Title
         ax.set_title(title, fontsize=14, color=app.colors["dark_green"], fontweight="bold")
 
-        # labels
+        # Labels
         ax.set_ylabel(ylabel, fontsize=12, color=app.colors["brown"])
         ax.set_xlabel("Time", fontsize=12, color=app.colors["brown"])
 
-        # ticks
+        # Ticks
         ax.tick_params(axis="x", rotation=45, colors=app.colors["brown"])
         ax.tick_params(axis="y", colors=app.colors["brown"])
 
-        # frame / rectangle around the plot
+        # Frame / rectangle around the plot
         for spine in ax.spines.values():
             spine.set_color(app.colors["dark_green"])
 
