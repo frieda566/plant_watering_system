@@ -13,15 +13,23 @@ It can generate health reports and alert when conditions require attention, help
 ### How it works 
 Our project combines Arduino Uno hardware with software written in the Arduino IDE and Python.
 For the plant watering system to function, several components are integrated into the system to measure environmental conditions. 
-A temperature and humidity sensor (DHT11) measures the climate of the room, while a soil moisture sensor measures the water content of the soil. These sensors continuously send their readings to the Arduino.
-Additional components are used to monitor or notify the user about certain processes. For example, an ultrasonic distance sensor measures the water level in the water container. 
-If the water level becomes too low, a LED indicator turns on to alert the user. A buzzer is also used to provide an audible signal when the pump is active.
+A temperature and humidity sensor (DHT11) measures the climate of the room, while a soil moisture sensor measures the water content of the soil. 
+These sensors continuously send their readings to the Arduino.
+
+Additional components are used to monitor or notify the user about certain processes. 
+For example, an ultrasonic distance sensor measures the water level in the water container. 
+If the water level becomes too low, a LED indicator turns on to alert the user. 
+A buzzer is also used to provide an audible signal when the pump is active.
 A key component of the system is the water pump, which is controlled through a relay connected to the Arduino. 
-When the soil moisture sensor detects a value below a predefined threshold, the system recognizes that the soil is too dry. The pump is then activated and runs for 5 seconds, watering the plant. 
+When the soil moisture sensor detects a value below a predefined threshold, the system recognizes that the soil is too dry. 
+The pump is then activated and runs for 5 seconds, watering the plant. 
+
 After this watering cycle, the system waits 30 seconds before checking the soil moisture again. 
 This delay prevents overwatering and allows the water to distribute in the soil before the next measurement is taken.
-The Arduino Uno acts as the central controller of the hardware system. It runs the program written in the Arduino IDE, reads all sensor values, controls the pump and other components, and displays key information such as temperature, humidity, soil moisture, and water level on an LCD display. 
+The Arduino Uno acts as the central controller of the hardware system. 
+It runs the program written in the Arduino IDE, reads all sensor values, controls the pump and other components, and displays key information such as temperature, humidity, soil moisture, and water level on an LCD display. 
 At the same time, the Arduino sends the sensor readings to the computer through a serial connection.
+
 On the software side, a Python application with a graphical interface receives the data sent by the Arduino. 
 This interface displays the live sensor values on a dashboard, allowing the user to monitor the plant’s condition in real time. 
 The program also stores the collected data in a database and records daily measurements so that historical data can be viewed later.
@@ -110,11 +118,18 @@ pip install pyserial
 ```
 
 ### Start the interface
-Run ui_components.py
-Run dashboard.py
-Run graphs.py
-Run history.py
-Run lexicon.py
-Run plant_health.py
-Run app.py
-Run main.py
+✅Run ui_components.py 
+
+✅Run dashboard.py
+
+✅Run graphs.py
+
+✅Run history.py
+
+✅Run lexicon.py
+
+✅Run plant_health.py
+
+✅Run app.py
+
+✅Run main.py
