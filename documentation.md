@@ -109,7 +109,7 @@ The screen lit up slightly, but nothing else happened. Since we were unsure whet
 We started this session by testing the LCD display using the following tutorial: https://docs.arduino.cc/learn/electronics/lcd-displays/. 
 After adjusting the wiring, the screen finally lit up and we modified our Arduino code so that it could actually display text.
 
-Meanwhile, Frieda tested a Python code prototype (which we generated with help from Chat GPT) to verify that the interface worked and that the communication with Arduino ran without problems. 
+Meanwhile, Frieda tested a Python code prototype to verify that the interface worked and that the communication with Arduino ran without problems. 
 When combining Python with Arduino, it is important to specify in the Python code which port the Arduino board is connected to.
 
 We also brainstormed additional features. One idea was to integrate a small plant lexicon into the Python interface so users could look up common houseplants and their care requirements. 
