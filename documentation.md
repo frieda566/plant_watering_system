@@ -314,8 +314,7 @@ Additionally, we used AI to improve our documentation and refining the wording o
 When implementing the CSV files, especially the plant_health_ranges because it couldn't read the file properly due to too many ; and a different layout we asked ChatGPT what the solution would be. After manually changing the file accordingly, everything could be read correctly. 
 We used AI for design tasks. For example, in def show_history(self):, AI helped us adjust heading colors and change the font from black to brown using style.configure and table.tag_configure. 
 Similarly, in def draw_graph(tab, y_values, ylabel, title):, AI ensured the graph matched our color scheme.
-Regarding Arduino IDE at the beginning we had troubles with the moisture, humidity and temperature reading - as our program showed the soil was dry - although it wasn't. We had to calibrate this accordingly and ChatGPT helped - we inserted the real numbers of wet, not wet and so on and then the numbers aligned. 
-We also used ChatGPT to help refactor the Python project by dividing the code into meaningful modules, improving organization and readability so it’s not just one long file.
+Regarding Arduino IDE at the beginning we had troubles with the moisture, humidity and temperature reading - as our program showed the soil was dry - although it wasn't. We had to calibrate this accordingly and ChatGPT helped - we inserted the real numbers of wet, not wet and so on and then the numbers aligned.
 
 ## Next steps and takeaways: 
 - Since our plant lexicon does not currently include every possible plant, it could be expanded in future development stages by adding more plant species and their specific care requirements.
