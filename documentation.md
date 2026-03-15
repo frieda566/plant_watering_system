@@ -4,13 +4,8 @@
 ![setup_09.12.2025](images/setup_09.12.2025.JPG)
 ![sketch_GUI](images/sketch_GUI.JPG)
 
-### 3D container: 
-![3d-print1](images/3d-print1.jpg)
-![3d-print2](images/3d-print2.jpg)
-
 ## Hardware setup 
-
-## circuit diagram 
+![hardware](images/hardware.jpg)
 
 ## Meetings 
 ### 16.11.2025 
@@ -317,9 +312,8 @@ At the beginning of the project, we used ChatGPT to get initial ideas for how th
 For debugging purposes, we pasted error messages of Arduino IDE or Python into ChatGPT to better understand their causes and explore possible solutions. 
 Additionally, we used AI to improve our documentation and refining the wording of explanations for clarity and precision. 
 When implementing the CSV files, especially the plant_health_ranges because it couldn't read the file properly due to too many ; and a different layout we asked ChatGPT what the solution would be. After manually changing the file accordingly, everything could be read correctly. 
-Additionally, we used AI in cases of design: For instance for the def show_history(self): we weren't sure how to change the colors of the headings and how to change the font from black to brown - so this is where we then inserted the code for the style.configure and added the table.tag_configure. 
-We did the same for the def draw_graph(tab, y_values, ylabel, title): function to ensure that the graph would be according to the color scheme we had picked out. Additionally, it helped us improve the plant_health.py search bar and search result design so that it matched the overall design. 
-Pasting the current code and describing what we actually wanted it to look like gave us helpful ideas.
+We used AI for design tasks. For example, in def show_history(self):, AI helped us adjust heading colors and change the font from black to brown using style.configure and table.tag_configure. 
+Similarly, in def draw_graph(tab, y_values, ylabel, title):, AI ensured the graph matched our color scheme.
 Regarding Arduino IDE at the beginning we had troubles with the moisture, humidity and temperature reading - as our program showed the soil was dry - although it wasn't. We had to calibrate this accordingly and ChatGPT helped - we inserted the real numbers of wet, not wet and so on and then the numbers aligned. 
 We also used ChatGPT to help refactor the Python project by dividing the code into meaningful modules, improving organization and readability so it’s not just one long file.
 
